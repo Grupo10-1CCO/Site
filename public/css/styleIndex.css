@@ -8,12 +8,7 @@
     font-family: NunitoRegular;
     src: url(../Site/fonts/Nunito-Regular.ttf);
 } */
-<<<<<<< HEAD
-@import url('https://fonts.googleapis.com/css2?family=Inter&family=Jockey+One&display=swap');
-
-=======
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Jockey+One&display=swap');
->>>>>>> 051a546de1924743704241160cb85c94ecf8bbcd
 /* FONTES */
 /* ====================================================== */
 /* BODY */
@@ -51,11 +46,7 @@ body::-webkit-scrollbar-thumb {
     align-items: center;
     background-color: #CFCFCF;
     position: fixed;
-<<<<<<< HEAD
-    border-bottom: 1vh  #4CFA91;
-=======
     border-bottom: 4px solid #4D9E41;
->>>>>>> 051a546de1924743704241160cb85c94ecf8bbcd
 }
 
 .header_logo {
@@ -152,16 +143,7 @@ a {
 /* BANNER */
 /* ====================================================== */
 /* DEGRADE2 */
-<<<<<<< HEAD
-/* .degrade2 {
-    height: 10vh;
-    background-image: linear-gradient(to bottom, #4CFA91, #FFFFFF);
-} */
-=======
 
->>>>>>> 051a546de1924743704241160cb85c94ecf8bbcd
-/* DEGRADE2 */
-/* ====================================================== */
 /* SOBRE NÓS */
 .solucao {
     background-color: #1E1E1E;
@@ -399,43 +381,43 @@ a {
     justify-content: space-between;
 }
 .c6_linha{
-    width: 132px;
-    height: 13px;
-    left: 147px;
-    top: 2105px;
+    width: 20.2vh;
+    height: 2.14vh;
+    left: 24.25vh;
+    top: 347.35;
     background-color: #242424;
     margin-top: 2vh;
 }
 .nubank_linha{
-    width: 132px;
-    height: 13px;
-    left: 147px;
-    top: 2105px;
+    width: 20.2vh;
+    height: 2.14vh;
+    left: 24.25vh;
+    top: 347.35;
     background-color: #820AD1;
     margin-top: 2vh;
 }
 .santander_linha{
-    width: 132px;
-    height: 13px;
-    left: 147px;
-    top: 2105px;
+    width: 20.2vh;
+    height: 2.14vh;
+    left: 24.25vh;
+    top: 347.35;
     background-color: #E00000;
     margin-top: 2vh;
 }
 .itau_linha{
-    width: 132px;
-    height: 13px;
-    left: 147px;
-    top: 2105px;
+    width: 20.2vh;
+    height: 2.14vh;
+    left: 24.25vh;
+    top: 347.35;
     background-color: #EC7000;
     margin-top: 2vh;
 }
 
 .bb_linha{
-    width: 132px;
-    height: 13px;
-    left: 147px;
-    top: 2105px;
+    width: 20.2vh;
+    height: 2.14vh;
+    left: 24.25vh;
+    top: 347.35;
     background-color: #FCFC30;
     margin-top: 2vh;
 }

@@ -18,54 +18,42 @@
         <div class="header_logo">
             <a href="index.html"> <img class="header_img" src="assets/Logo.png" alt="SAMP"> </a>
         </div>
-
+        <div class="espaco"></div>
         <div class="header_box">
-            <button onclick="botao_cadastro()" id="header_cadastro"> CADASTRO </button>
-            <button onclick="botao_login()" id="header_login"> LOGIN </button>
+            <span class="header_texto"> <a href="index.html">HOME</a> </span>
+            <span class="header_texto"> <a href="#solucao">SOLUÇÃO</a> </span>
+            <span class="header_texto"> <a href="#parceiros">PARCEIROS</a> </span>
+            <span class="header_texto"> <a href="#planos">PLANOS</a> </span>   
+            <span class="header_texto"> <a href="#contato">CONTATO</a> </span>
         </div>
+        <div class="botoes">
+            <button class="header_botao"><a href="cadastro.html">CADASTRO</a></button>
+            <button class="header_botao"><a href="login.html">LOGIN</a></button> 
+        </div> 
     </div>
 
     <div class="linha"></div>
     <span id="mensagem_erro" class="ms"></span>
-
-    <div id="cadastro_mostrar" style="display: block;">
-        <div class="cadastro">
-            <div class="cadastro_left">
-                <img class="cadastro_left_img" src="assets/Cadastro_Login.png" alt="Cadastro">
-            </div>
-            <div class="cadastro_right">
-                <span class="cadastro_right_titulo">CADASTRE-SE</span>
-                <span class="cadastro_right_texto">Nome</span>
-                <input id="nome_input" class="cadastro_right_input" type="text">
-                <span class="cadastro_right_texto">CNPJ</span>
-                <input id="cnpj_input" class="cadastro_right_input" type="text">
-                <span class="cadastro_right_texto">E-mail</span>
-                <input id="email_cad_input" class="cadastro_right_input" type="text">
-                <span class="cadastro_right_texto">Senha</span>
-                <input id="senha_cad_input" class="cadastro_right_input" type="password">
-                <span class="cadastro_right_texto">Confirme a senha</span>
-                <input id="conf_senha_input" class="cadastro_right_input" type="password">
-                <span onclick="botao_login()" class="cadastro_right_frase">Já tem cadastro? Faça login</span>
-                <button onclick="cadastrar()" class="cadastro_right_botao">Cadastrar</button>
+    <div class="container">
+        <div class="cont-dir">
+            <div class="container-cadastro">
+                <h1>LOGIN</h1>
+                <section id="form_empresa">
+                    <h3>Realize seu login:</h3>
+                    <div class="form">
+                        <label for="inp_email_empresa">E-mail:</label>
+                        <input id="inp_email_empresa">
+                        <label for="inp_senha_empresa">Senha:</label>
+                        <input id="inp_senha_empresa">
+                        <button onclick="navegar()">Entrar</button>
+                        <label>Ainda não cadastrou sua empresa?</label>
+                        <a id="tag_a_para_tela_cadastro" href="cadastro.html">Cadastrar</a>
+                    </div>
+                </section>
             </div>
         </div>
-    </div>
-
-    <div id="login_mostrar" style="display: none;">
-        <div class="login">
-            <div class="login_left">
-                <img class="login_left_img" src="assets/Cadastro_Login.png" alt="Cadastro">
-            </div>
-            <div class="login_right">
-                <span class="login_right_titulo">ENTRE</span>
-                <span class="login_right_texto">E-mail</span>
-                <input id="email_log_input" class="login_right_input" type="text">
-                <span class="login_right_texto">Senha</span>
-                <input id="senha_log_input" class="login_right_input" type="password">
-                <span onclick="botao_cadastro()" class="login_right_frase">Ainda não se cadastrou? Cadastre-se</span>
-                <span class="login_right_frase">Esqueci minha senha</span>
-                <button onclick="entrar()" class="login_right_botao">Entrar</button>
-            </div>
+        <div class="cont-esq">
+            <img class="login_left_img" src="assets/Cadastro_Login.png" alt="Cadastro">
         </div>
     </div>
 

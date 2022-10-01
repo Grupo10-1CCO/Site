@@ -24,7 +24,7 @@ body {
 }
 
 body::-webkit-scrollbar {
-    width: 1vw;               
+    width: 0.6vw;         
   }
   
 body::-webkit-scrollbar-track {
@@ -200,6 +200,23 @@ a {
     font-size: 18px;
     margin-top: 20px;
     cursor: pointer;
+}
+
+.campo-coluna{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.campo-senha{
+    display: flex;
+    flex-direction: column;
+    width: 48%;
+}
+
+#form_usuario{
+    display: none;
 }
 
 /* Fim Seção Cadastro

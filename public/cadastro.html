@@ -48,7 +48,34 @@
                         <label for="inp_email_empresa">E-mail:</label>
                         <input id="inp_email_empresa">
                     </div>
-                    <button>Avançar</button>
+                    <button onclick="navegar()">Avançar</button>
+                </section>
+                <section id="form_usuario">
+                    <h3>Cadastro do Usuário:</h3>
+                    <div class="form">
+                        <label for="inp_nome_usuario">Nome da Empresa:</label>
+                        <input id="inp_nome_usuario">
+                        <label for="inp_email_usuario">E-mail:</label>
+                        <input id="inp_email_usuario">
+                        <div class="campo-coluna">
+                            <div class="campo-senha">
+                                <label>Senha:</label>
+                                <input id="inp_senha_usuario">
+                            </div>
+                            <div class="campo-senha">
+                                <label>Confirme a senha:</label>
+                                <input id="inp_conf_senha_usuario">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="campo-coluna">
+                        <div class="campo-senha">
+                            <button onclick="navegar()">Voltar</button>
+                        </div>
+                        <div class="campo-senha">
+                            <button>Cadastrar</button>
+                        </div>
+                    </div>
                 </section>
             </div>
         </div>
@@ -59,3 +86,115 @@
 </body>
 
 </html>
+
+<script src="js/formCadastro.js"></script>
+
+<script>
+    
+    function cadastrar() {
+        //Recupere o valor da nova input pelo nome do id
+        // Agora vá para o método fetch logo abaixo
+        var nome = nome_input.value;
+        var email = email_cad_input.value;
+        var senha = senha_cad_input.value;
+        var confirmacaoSenha = conf_senha_input.value;
+        // var cargo = cargo_cad_input.value;
+        // var fkEmpresa = fkEmpresa_cad_input.value;
+        // usuario ^^^
+        // Empresa VVV
+        var nomeEmpresa = inp_nome_empresa.value;
+        var emailEmpresa = inp_email_empresa.value;
+        var cnpj = inp_cnpj_empresa.value;
+       
+        /*
+        var nome = "Filipe";
+        var email = "Filipe@email.com";
+        var senha = 1234;
+        var confirmacaoSenha = 1234;
+        var fkEmpresa = 1;
+        // usuario ^^^
+        // Empresa VVV
+        var nomeEmpresa = "Itau";
+        var emailEmpresa = "Itau@itaudominio.com";
+        var cnpj = "11111111111111";
+        */
+
+
+        if (nome == "" || email == "" || senha == "" || confirmacaoSenha == "" || nomeEmpresa == "" || emailEmpresa == "" || cnpj == "") {
+            mensagem_erro.classList.add("alerta")
+            mensagem_erro.style.display = "flex";
+            mensagem_erro.innerHTML = "Por favor não deixe nenhum campo em branco";
+            setTimeout(() => {
+                mensagem_erro.style.display = "none";
+                mensagem_erro.classList.remove("alerta");
+                mensagem_erro.innerHTML = "";
+            }, "5000")
+
+            return false;
+        }
+        else if (confirmacaoSenha != senha) {
+            mensagem_erro.classList.add("erro")
+            mensagem_erro.style.display = "flex";
+            mensagem_erro.innerHTML = "Senhas não coincidem";
+            setTimeout(() => {
+                mensagem_erro.style.display = "none";
+                mensagem_erro.classList.remove("erro");
+                mensagem_erro.innerHTML = "";
+            }, "5000")
+
+            return false;
+        }
+
+        // Enviando o valor da nova input
+        fetch("/usuarios/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                nomeServer: nome,
+                emailServer: email,
+                senhaServer: senha,
+                fkEmpresaServer: fkEmpresa,
+                // Empresa VVV
+                nomeEmpresaServer: nomeEmpresa,
+                emailEmpresaServer: emailEmpresa,
+                cnpjServer: cnpj
+                
+            })
+        }).then(function (resposta) {
+
+            console.log("resposta: ", resposta);
+
+            if (resposta.ok) {
+                mensagem_erro.classList.add("ok");
+                mensagem_erro.style.display = "flex";
+
+                mensagem_erro.innerHTML = "Cadastro realizado com sucesso!";
+
+                nome_input.value = "";
+                email_cad_input.value = "";
+                senha_cad_input.value = "";
+                cnpj_input.value = "";
+                conf_senha_input.value = "";
+
+                setTimeout(() => {
+                    mensagem_erro.style.display = "none";
+                    mensagem_erro.classList.remove("ok");
+                    mensagem_erro.innerHTML = "";
+                    botao_login();
+                }, "5000")
+
+            } else {
+                throw ("Houve um erro ao tentar realizar o cadastro!");
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+
+        return false;
+    }
+
+</script>

@@ -39,14 +39,15 @@ body::-webkit-scrollbar-thumb {
 /* ====================================================== */
 /* HEADER */
 .header {
-    height: 11vh;
+    height: 9vh;
     width: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     background-color: #CFCFCF;
-    position: fixed;
+    position: sticky;
     border-bottom: 4px solid #4D9E41;
+    position: fixed;
 }
 
 .header_logo {
@@ -58,14 +59,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 .header_img {
-    height: 9.5vh;
+    height: 30%;
+    width: 45%;
 }
-
-.espaco {
-    height: 100%;
-    width: 5%;
-}
-
 
 .header_box {
     height: 100%;
@@ -82,7 +78,7 @@ a {
 }
 
 .header_texto:hover {
-    color: #4CFA91;
+    color: #4D9E41;
 }
 
 .header_texto {
@@ -104,7 +100,7 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 7vh;
+    height: 60%;
     width: 9vw;
     font-family: 'Inter', sans-serif;
     font-size: 90%;
@@ -112,7 +108,7 @@ a {
     font-weight: 700;
     background-color: #4D9E41;
     border: 2px solid #4D9E41;
-    border-radius: 2vh;
+    border-radius: 10px;
 }
 /* HEADER */
 /* ====================================================== */
@@ -342,6 +338,7 @@ a {
     border-radius: 2vh;
     border: 2px solid #313131;
     background-color:#CFCFCF ;
+    resize: none;
 }
 
 .contato_right_botao {
@@ -352,6 +349,7 @@ a {
     font-weight: 700; 
     background-color: #4D9E41;
     border-radius: 2vh;
+    border: 0;
     margin-left: 16vw;
     margin-top: 3vh;
 }
@@ -543,13 +541,19 @@ a {
 /* FOOTER */
 .footer {
     border-top: solid 3px #313131;
-    height: 50vh;
+    height: 60vh;
     justify-content: center;
     background-color: #4D9E41;
     display: flex;
     flex-direction: row;
 }
+.pai_footer{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
 .titulo_endereco {
+    padding-bottom: 50px;
     display: flex;
     justify-content: center;
 }
@@ -560,15 +564,30 @@ a {
     font-weight: 700; 
 }
 .conteudo_footer{
-    margin-top:120px;
+    /* margin-top:120px; */
     font-family: 'Inter', sans-serif;
     font-size: 3vh;
     display: flex;
+    flex-direction: row;
     justify-content: center;
 }
 .local_footer {
     height: 30px;
     width: 30px;
+}
+
+.conteudo_footer_esquerda{
+    display: flex;
+    width: 50%;
+    flex-direction: row;
+    justify-content:flex-end;
+    align-items: center;
+}
+
+.conteudo_footer_direita{
+    display: flex;
+    width: 50%;
+    flex-direction: row;
 }
 
 /* FOOTER */

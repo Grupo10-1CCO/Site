@@ -69,6 +69,7 @@ function cadastrar(req, res) {
     var cargo = "Responsável";
     var email = req.body.emailServer;
     var senha = req.body.senhaServer;
+    var fkEmpresa = req.body.fkEmpresaServer;
     
 
     // Faça as validações dos valores
@@ -79,22 +80,6 @@ function cadastrar(req, res) {
     } else if (senha == undefined) {
         res.status(400).send("Sua senha está undefined!");
     }else {
-        
-        usuarioModel.cadastrarEmpresa(cnpj, nomeEmpresa, emailEmpresa)
-        .then(
-            function (resultado) {
-                res.json(resultado);
-            }
-        ).catch(
-            function (erro) {
-                console.log(erro);
-                console.log(
-                    "\nHouve um erro ao realizar o cadastro! Erro: ",
-                    erro.sqlMessage
-                );
-                res.status(500).json(erro.sqlMessage);
-            }
-        );
 
         // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
         usuarioModel.cadastrar(nome, email, senha, fkEmpresa, cargo)
@@ -133,6 +118,7 @@ function cadastrarEmpresa(req, res){
         .then(
             function (resultado) {
                 res.json(resultado);
+
             }
         ).catch(
             function (erro) {
@@ -145,28 +131,34 @@ function cadastrarEmpresa(req, res){
             }
         );
 
-        // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
-        usuarioModel.cadastrar(nome, email, senha, fkEmpresa, cargo)
-            .then(
-                function (resultado) {
-                    res.json(resultado);
-                }
-            ).catch(
-                function (erro) {
-                    console.log(erro);
-                    console.log(
-                        "\nHouve um erro ao realizar o cadastro! Erroblé: ",
-                        erro.sqlMessage
-                    );
-                    res.status(500).json(erro.sqlMessage);
-                }
-            );
+        
     }
+}
+
+function selecionarUltimaEmpresa(req, res){
+
+    usuarioModel.selecionarUltimaEmpresa().then(
+        function(resultado){
+            if(resultado.length == 1){
+                res.status(200).json(resultado);
+            }else{
+                console.log("Algo deu errado na função de retornar a empreda cadastrada!");
+            }
+        }
+    ).catch(
+        function (erro){
+            console.log("Erro no catch do selecionar ultima empresa! Erro: ", erro.sqlMessage);
+            res.status(500).json(erro.sqlMessage);
+        }
+    )
+
 }
 
 module.exports = {
     entrar,
     cadastrar,
+    cadastrarEmpresa,
+    selecionarUltimaEmpresa,
     listar,
     testar
 }

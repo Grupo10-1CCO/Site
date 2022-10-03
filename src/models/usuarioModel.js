@@ -24,10 +24,18 @@ function cadastrarEmpresa(cnpj, nomeEmpresa, emailEmpresa) {
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     var instrucao = `
-    INSERT INTO Empresa (cnpj, nomeEmpresa, emailEmpresa) VALUES ('${cnpj}', '${nomeEmpresa}', '${emailEmpresa}');
+    INSERT INTO Empresa (cnpj, nome, email) VALUES ('${cnpj}', '${nomeEmpresa}', '${emailEmpresa}');
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
+}
+
+function selecionarUltimaEmpresa(){
+    var query = `
+        SELECT MAX(idEmpresa) AS 'idEmpresa' FROM Empresa;
+    `;
+    console.log("Executando a instrução SQL: \n" + query);
+    return database.executar(query);
 }
 
 // Coloque os mesmos parâmetros aqui. Vá para a var instrucao
@@ -47,5 +55,6 @@ module.exports = {
     entrar,
     cadastrar,
     cadastrarEmpresa,
+    selecionarUltimaEmpresa,
     listar,
 };

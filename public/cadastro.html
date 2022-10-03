@@ -53,18 +53,18 @@
                 <section id="form_usuario">
                     <h3>Cadastro do Usuário:</h3>
                     <div class="form">
-                        <label for="inp_nome_usuario">Nome da Empresa:</label>
+                        <label for="inp_nome_usuario">Nome do Usuário:</label>
                         <input id="inp_nome_usuario">
                         <label for="inp_email_usuario">E-mail:</label>
                         <input id="inp_email_usuario">
                         <div class="campo-coluna">
                             <div class="campo-senha">
                                 <label>Senha:</label>
-                                <input id="inp_senha_usuario">
+                                <input id="inp_senha_usuario" type="password">
                             </div>
                             <div class="campo-senha">
                                 <label>Confirme a senha:</label>
-                                <input id="inp_conf_senha_usuario">
+                                <input id="inp_conf_senha_usuario" type="password">
                             </div>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                             <button onclick="navegar()">Voltar</button>
                         </div>
                         <div class="campo-senha">
-                            <button>Cadastrar</button>
+                            <button onclick="cadastrar()">Cadastrar</button>
                         </div>
                     </div>
                 </section>
@@ -94,10 +94,10 @@
     function cadastrar() {
         //Recupere o valor da nova input pelo nome do id
         // Agora vá para o método fetch logo abaixo
-        var nome = nome_input.value;
-        var email = email_cad_input.value;
-        var senha = senha_cad_input.value;
-        var confirmacaoSenha = conf_senha_input.value;
+        var nome = inp_nome_usuario.value;
+        var email = inp_email_usuario.value;
+        var senha = inp_senha_usuario.value;
+        var confirmacaoSenha = inp_conf_senha_usuario.value;
         // var cargo = cargo_cad_input.value;
         // var fkEmpresa = fkEmpresa_cad_input.value;
         // usuario ^^^
@@ -146,19 +146,12 @@
         }
 
         // Enviando o valor da nova input
-        fetch("/usuarios/cadastrar", {
+        fetch("/usuarios/cadastrarEmpresa", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                // crie um atributo que recebe o valor recuperado aqui
-                // Agora vá para o arquivo routes/usuario.js
-                nomeServer: nome,
-                emailServer: email,
-                senhaServer: senha,
-                fkEmpresaServer: fkEmpresa,
-                // Empresa VVV
                 nomeEmpresaServer: nomeEmpresa,
                 emailEmpresaServer: emailEmpresa,
                 cnpjServer: cnpj
@@ -169,23 +162,38 @@
             console.log("resposta: ", resposta);
 
             if (resposta.ok) {
-                mensagem_erro.classList.add("ok");
-                mensagem_erro.style.display = "flex";
+                fetch("/usuarios/selecionarUltimaEmpresa").then(function (resposta){
 
-                mensagem_erro.innerHTML = "Cadastro realizado com sucesso!";
+                    resposta.json().then(function (json){
 
-                nome_input.value = "";
-                email_cad_input.value = "";
-                senha_cad_input.value = "";
-                cnpj_input.value = "";
-                conf_senha_input.value = "";
 
-                setTimeout(() => {
-                    mensagem_erro.style.display = "none";
-                    mensagem_erro.classList.remove("ok");
-                    mensagem_erro.innerHTML = "";
-                    botao_login();
-                }, "5000")
+                        console.log(json);
+                        console.log(JSON.stringify(json));
+
+                        fkEmpresa = json[0].idEmpresa;
+
+                        console.log("FOI: " + fkEmpresa)
+                        
+                        fetch("/usuarios/cadastrar", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                nomeServer: nome,
+                                emailServer: email,
+                                senhaServer: senha,
+                                fkEmpresaServer: fkEmpresa
+                            })
+                        }).then(function (resposta) {
+                            if(resposta.ok){
+                                alert("RODOU!")
+                            }
+                        })
+    
+                    });
+
+                })
 
             } else {
                 throw ("Houve um erro ao tentar realizar o cadastro!");

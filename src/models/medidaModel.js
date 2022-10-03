@@ -52,6 +52,40 @@ function buscarUltimosRegistros(idMaquina, limite_linhas) {
     return database.executar(query);
 }
 
+function buscarRegistroTempoReal(idMaquina) {
+
+    var query = ''
+
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+
+        // ADAPTAR
+
+        query = `select top ${limite_linhas}
+        dht11_temperatura as temperatura, 
+        dht11_umidade as umidade,  
+                        momento,
+                        FORMAT(momento, 'HH:mm:ss') as momento_grafico
+                    from medida
+                    where fk_aquario = ${idAquario}
+                    order by id desc`;
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        query = `SELECT
+                    idRegistro,
+                    fkComponente,
+                    nomeComponente, 
+                    registro, 
+                    unidadeMedida, 
+                    DATE_FORMAT(momento,'%d/%m/%Y %H:%i:%s') 
+                AS momento_grafico FROM DadosServidor WHERE idMaquina = ${idMaquina} ORDER BY idRegistro DESC LIMIT 1;`;
+    } else {
+        console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
+        return
+    }
+
+    console.log("Executando a instrução SQL: \n" + query);
+    return database.executar(query);
+}
+
 function mediaUsoComponente(){
     var query = '';
 
@@ -136,6 +170,7 @@ function mediaUsoComponente(){
 module.exports = {
     buscarMaquinas,
     buscarUltimosRegistros,
+    buscarRegistroTempoReal,
     mediaUsoComponente
     // buscarUltimasMedidas,
     // buscarMedidasEmTempoReal

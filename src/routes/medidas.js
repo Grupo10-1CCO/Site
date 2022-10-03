@@ -15,6 +15,10 @@ router.get("/ultimosRegistros/:idMaquina", function (req, res){
     medidaController.buscarUltimosRegistros(req, res);
 });
 
+router.get("/registrosTempoReal/:idMaquina", function(req, res){
+    medidaController.buscarRegistroTempoReal(req, res);
+});
+
 router.get("/ultimas/:idAquario", function (req, res) {
     medidaController.buscarUltimasMedidas(req, res);
 });

@@ -16,7 +16,7 @@ function buscarMaquinas(req, res){
 
 function buscarUltimosRegistros(req, res){
 
-    const limite_linhas = 15;
+    const limite_linhas = 35;
 
     var idMaquina = req.params.idMaquina;
 

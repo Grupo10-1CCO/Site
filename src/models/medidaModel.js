@@ -76,7 +76,7 @@ function buscarRegistroTempoReal(idMaquina) {
                     registro, 
                     unidadeMedida, 
                     DATE_FORMAT(momento,'%d/%m/%Y %H:%i:%s') 
-                AS momento_grafico FROM DadosServidor WHERE idMaquina = ${idMaquina} ORDER BY idRegistro DESC LIMIT 1;`;
+                AS momento_grafico FROM DadosServidor WHERE idMaquina = ${idMaquina} ORDER BY idRegistro DESC LIMIT 4;`;
     } else {
         console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
         return

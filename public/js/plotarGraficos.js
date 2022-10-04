@@ -131,16 +131,16 @@ function gerar(idMaquina) {
             div.appendChild(canva);
             document.getElementById("area_grafico").appendChild(div);
 
-            var socorro = document.getElementById(`grafico${componentes[i].fkComponente}`).getContext('2d');
+            // var socorro = document.getElementById(`grafico${componentes[i].fkComponente}`).getContext('2d');
 
-            window.grafico = new Chart(
-                socorro,
-                config
+            var graficoMon = new Chart(
+                document.getElementById(`grafico${componentes[i].fkComponente}`),
+                config,
             );
 
-            console.log("socororororororororo: " + idMaquina)
+            setTimeout(() => atualizarGrafico(graficoMon, idMaquina, data), 12000)
 
-            setTimeout(() => atualizarGrafico(grafico, idMaquina, data), 5000)
+
         }
 
     }
@@ -160,14 +160,16 @@ function gerar(idMaquina) {
                     data.datasets[0].data.shift();  // apagar o primeiro de temperatura
                     data.datasets[0].data.push(novoPonto[0].registro); // incluir uma nova medida de temperatura
 
-                    window.grafico.update();
+                    console.log(data)
+
+                    grafico.update('none');
                     console.log("Update realizado");
 
-                    proximaAtt = setTimeout(() => atualizarGrafico(grafico, idMaquina, data), 5000);
+                    proximaAtt = setTimeout(() => atualizarGrafico(grafico, idMaquina, data), 12000);
                 })
             } else {
                 console.error('Nada foi encontrado!');
-                proximaAtt = setTimeout(() => atualizarGrafico(grafico, idMaquina, data), 5000);
+                proximaAtt = setTimeout(() => atualizarGrafico(grafico, idMaquina, data), 12000);
             }
         });
 

@@ -11,11 +11,15 @@ router.get("/mediaUsoComponente", function(req, res){
     medidaController.mediaUsoComponente(req, res);
 });
 
-router.get("/ultimosRegistros/:idMaquina", function (req, res){
+router.get("/buscarComponentesMaquina/:idEmpresa/:idMaquina", function (req, res){
+    medidaController.buscarComponentesMaquina(req, res);
+});
+
+router.get("/ultimosRegistros/:idEmpresa/:idMaquina/:fkComponente", function (req, res){
     medidaController.buscarUltimosRegistros(req, res);
 });
 
-router.get("/registrosTempoReal/:idMaquina", function(req, res){
+router.get("/registrosTempoReal/:idEmpresa/:idMaquina/:fkComponente", function(req, res){
     medidaController.buscarRegistroTempoReal(req, res);
 });
 

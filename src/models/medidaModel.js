@@ -19,7 +19,22 @@ function buscarMaquinas(){
     return database.executar(query);
 }
 
-function buscarUltimosRegistros(idMaquina, limite_linhas) {
+function buscarComponentesMaquina(idEmpresa, idMaquina){
+    var query = ``;
+
+    if(process.env.AMBIENTE_PROCESSO == "producao") {
+        // ADAPTAR
+    }else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento"){
+        query = `SELECT fkComponente FROM DadosServidor WHERE idMaquina = ${idMaquina} AND idEmpresa = ${idEmpresa} GROUP BY fkComponente;`;
+    }else{
+        console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
+        return
+    }
+    console.log("Executando a instrução SQL: \n" + query);
+    return database.executar(query);
+}
+
+function buscarUltimosRegistros(idEmpresa, idMaquina, fkComponente, limite_linhas) {
 
     var query = ''
 
@@ -36,13 +51,8 @@ function buscarUltimosRegistros(idMaquina, limite_linhas) {
                     where fk_aquario = ${idAquario}
                     order by id desc`;
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
-        query = `SELECT
-                    fkComponente,
-                    nomeComponente, 
-                    registro, 
-                    unidadeMedida, 
-                    DATE_FORMAT(momento,'%d/%m/%Y %H:%i:%s') 
-                AS momento_grafico FROM DadosServidor WHERE idMaquina = ${idMaquina} order by idMaquina desc limit ${limite_linhas};`;
+        query = `SELECT * FROM DadosServidor 
+                    WHERE idEmpresa = ${idEmpresa} AND idMaquina = ${idMaquina} AND fkComponente = ${fkComponente} ORDER BY idRegistro LIMIT ${limite_linhas};`;
     } else {
         console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
         return
@@ -52,7 +62,7 @@ function buscarUltimosRegistros(idMaquina, limite_linhas) {
     return database.executar(query);
 }
 
-function buscarRegistroTempoReal(idMaquina) {
+function buscarRegistroTempoReal(idEmpresa, idMaquina, fkComponente) {
 
     var query = ''
 
@@ -69,14 +79,8 @@ function buscarRegistroTempoReal(idMaquina) {
                     where fk_aquario = ${idAquario}
                     order by id desc`;
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
-        query = `SELECT
-                    idRegistro,
-                    fkComponente,
-                    nomeComponente, 
-                    registro, 
-                    unidadeMedida, 
-                    DATE_FORMAT(momento,'%d/%m/%Y %H:%i:%s') 
-                AS momento_grafico FROM DadosServidor WHERE idMaquina = ${idMaquina} ORDER BY idRegistro DESC LIMIT 4;`;
+        query = `SELECT * FROM DadosServidor 
+                    WHERE idEmpresa = ${idEmpresa} AND idMaquina = ${idMaquina} AND fkComponente = ${fkComponente} ORDER BY idRegistro DESC LIMIT 1;`;
     } else {
         console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
         return
@@ -169,6 +173,7 @@ function mediaUsoComponente(){
 
 module.exports = {
     buscarMaquinas,
+    buscarComponentesMaquina,
     buscarUltimosRegistros,
     buscarRegistroTempoReal,
     mediaUsoComponente

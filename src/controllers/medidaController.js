@@ -14,13 +14,34 @@ function buscarMaquinas(req, res){
     })
 }
 
-function buscarUltimosRegistros(req, res){
+function buscarComponentesMaquina(req, res){
 
-    const limite_linhas = 35;
-
+    var idEmpresa = req.params.idEmpresa;
     var idMaquina = req.params.idMaquina;
 
-    medidaModel.buscarUltimosRegistros(idMaquina, limite_linhas).then(function (resultado){
+    medidaModel.buscarComponentesMaquina(idEmpresa, idMaquina).then(function (resultado){
+        if(resultado.length > 0){
+            res.status(200).json(resultado);
+        }else{
+            res.status(204).send("Não foram encontrados componentes!");
+        }
+    }).catch(function (erro){
+        console.log(erro);
+        console.log("Houve um erro ao tentar resgatar os componentes da máquina! Erro: " + erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+
+}
+
+function buscarUltimosRegistros(req, res){
+
+    const limite_linhas = 8;
+
+    var idEmpresa = req.params.idEmpresa;
+    var idMaquina = req.params.idMaquina;
+    var fkComponente = req.params.fkComponente;
+
+    medidaModel.buscarUltimosRegistros(idEmpresa, idMaquina, fkComponente, limite_linhas).then(function (resultado){
         if(resultado.length > 0){
             res.status(200).json(resultado);
         }else{
@@ -35,9 +56,12 @@ function buscarUltimosRegistros(req, res){
 }
 
 function buscarRegistroTempoReal(req, res){
-    var idMaquina = req.params.idMaquina;
 
-    medidaModel.buscarRegistroTempoReal(idMaquina).then(function (resultado){
+    var idEmpresa = req.params.idEmpresa;
+    var idMaquina = req.params.idMaquina;
+    var fkComponente = req.params.fkComponente;
+
+    medidaModel.buscarRegistroTempoReal(idEmpresa, idMaquina, fkComponente).then(function (resultado){
         if(resultado.length > 0){
             res.status(200).json(resultado);
         }else{
@@ -67,6 +91,7 @@ function mediaUsoComponente(req, res){
 module.exports = {
     buscarMaquinas,
     buscarUltimosRegistros,
+    buscarComponentesMaquina,
     buscarRegistroTempoReal,
     mediaUsoComponente
     // buscarUltimasMedidas,

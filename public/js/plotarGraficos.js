@@ -9,18 +9,15 @@ function plotarBotoes() {
             resposta.json().then(function (resposta) {
                 console.log("Máquinas recebidas: ", JSON.stringify(resposta));
 
-
-
                 for (var i = 0; i < resposta.length; i++) {
 
                     var dadosMaquina = resposta[i];
 
                     var botao = document.createElement("button");
                     botao.setAttribute("id", `botaoMaquina${dadosMaquina.idMaquina}`);
-                    botao.setAttribute("onClick", `gerar(${dadosMaquina.idMaquina})`);
+                    botao.setAttribute("onClick", `gerar(1, ${dadosMaquina.idMaquina})`);
                     botao.innerHTML = `${dadosMaquina.nome}`;
                     document.getElementById("area_botoes").appendChild(botao);
-
 
                 }
             })
@@ -28,7 +25,7 @@ function plotarBotoes() {
     })
 }
 
-function gerar(idMaquina) {
+function gerar(idEmpresa, idMaquina) {
 
     plotarBotoes();
 
@@ -38,143 +35,138 @@ function gerar(idMaquina) {
     titulo.innerHTML = `Monitoramento`;
     area_grafico.appendChild(titulo);
 
-    fetch(`/medidas/ultimosRegistros/${idMaquina}`, { cache: 'no-store' }).then(function (resposta) {
-        if (resposta.ok) {
-            resposta.json().then(function (retorno) {
+    fetch(`/medidas/buscarComponentesMaquina/${idEmpresa}/${idMaquina}`, { cache: 'no-store' }).then(function (resposta){
+        if(resposta.ok){
+            resposta.json().then(function (retorno){
                 console.log(`Dados recebidos: ${JSON.stringify(retorno)}`);
-                // retorno.reverse();
 
-                plotarGraficoMon(retorno, idMaquina);
+                var vetorComponentes = [];
+
+                for(var i = 0; i < retorno.length; i++){
+                    vetorComponentes.push(retorno[i].fkComponente);
+                }
+
+                gerarGrafico(vetorComponentes);
+
             })
-        } else {
-            console.error('Nada foi encontrado!');
         }
     });
 
-    function plotarGraficoMon(retorno, idMaquina) {
 
-        // var dados = {
-        //     labels: [],
-        //     dataset: [{
-        //         label: '',
-        //         backgroundColor: 'rgb(255, 99, 132)',
-        //         borderColor: 'rgb(255, 99, 132)',
-        //         data: []
-        //     }]
-        // };
+    function gerarGrafico(vetorComponentes){
 
-        var componentes = [];
+        for(var i = 0; i < vetorComponentes.length; i++){
+            var idComponente = vetorComponentes[i];
+            fetch(`/medidas/ultimosRegistros/${idEmpresa}/${idMaquina}/${idComponente}`, { cache: 'no-store' }).then(function (resposta) {
+                if (resposta.ok) {
+                    resposta.json().then(function (retorno) {
+                        console.log(`Dados recebidos: ${JSON.stringify(retorno)}`);
+                        // retorno.reverse();
+        
+                        configurarGraficoMon(retorno, idComponente);
 
-        for (var i = 0; i < retorno.length; i++) {
-            var existeFk = true;
-
-            for (var j = 0; j < componentes.length; j++) {
-                if (retorno[i].fkComponente == componentes[j].fkComponente) {
-                    existeFk = false;
+                        graficosMedia(idMaquina);
+        
+                    })
+                } else {
+                    console.error('Nada foi encontrado!');
                 }
-            }
-            if (existeFk) {
-                componentes.push({
-                    "fkComponente": retorno[i].fkComponente,
-                    "nomeComponente": retorno[i].nomeComponente,
-                    "unidadeMedida": retorno[i].unidadeMedida,
-                    "registro": [],
-                    "momento": []
-                })
-            }
+            });
         }
 
-        console.log(componentes)
+    }    
 
-        for (var i = 0; i < retorno.length; i++) {
-            for (var j = 0; j < componentes.length; j++) {
-                if (retorno[i].fkComponente == componentes[j].fkComponente) {
-                    componentes[j].registro.push(retorno[i].registro);
-                    componentes[j].momento.push(retorno[i].momento_grafico);
-                }
-            }
+    function configurarGraficoMon(retorno, idComponente) {
 
+        console.log("CHEGOU AQUI:")
+
+        var vetorData = [];
+        var vetorRegistro = [];
+
+        for(var i = 0; i < retorno.length; i++){
+            var tupla = retorno[i];
+            vetorData.push(tupla.momento);
+            vetorRegistro.push(tupla.registro);
         }
 
-        for (var i = 0; i < componentes.length; i++) {
+        var data = {
+            labels: vetorData,
+            datasets: [{
+                label: `Componente: ${retorno[0].nomeComponente} | Unidade de Medida: ${retorno[0].unidadeMedida}`,
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: vetorRegistro
+            }]
+        }
 
-            var data = {
-                labels: componentes[i].momento,
-                datasets: [{
-                    label: `Componente: ${componentes[i].nomeComponente} | Unidade de Medida: ${componentes[i].unidadeMedida}`,
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: componentes[i].registro
-                }]
-            }
-
-            var config = {
-                type: 'line',
-                data: data,
-                options: {
-                    scales: {
-                        y: {
-                            min: 0,
-                            max: 100
-                        }
+        var config = {
+            type: 'line',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 100
                     }
                 }
-            };
+            }
+        };
 
-            var h3Nome = document.createElement("h3");
-            h3Nome.innerHTML = componentes[i].nomeComponente;
+        var h3Nome = document.createElement("h3");
+        h3Nome.innerHTML = retorno[0].nomeComponente;
 
-            var div = document.createElement("div");
-            var canva = document.createElement("canvas");
-            canva.setAttribute('id', `grafico${componentes[i].fkComponente}`);
-            div.append(h3Nome);
-            div.appendChild(canva);
-            document.getElementById("area_grafico").appendChild(div);
+        var div = document.createElement("div");
+        var canva = document.createElement("canvas");
+        canva.setAttribute('id', `grafico${retorno[0].fkComponente}`);
+        div.append(h3Nome);
+        div.appendChild(canva);
+        document.getElementById("area_grafico").appendChild(div);
 
-            // var socorro = document.getElementById(`grafico${componentes[i].fkComponente}`).getContext('2d');
+        var graficoMon = new Chart(
+            document.getElementById(`grafico${retorno[0].fkComponente}`),
+            config,
+        );
 
-            var graficoMon = new Chart(
-                document.getElementById(`grafico${componentes[i].fkComponente}`),
-                config,
-            );
-
-            setTimeout(() => atualizarGrafico(graficoMon, idMaquina, data), 12000)
-
-
-        }
+        setTimeout(() => atualizarGrafico(graficoMon, idMaquina, idComponente, data), 4000);
 
     }
 
-    function atualizarGrafico(grafico, idMaquina, data) {
+    function atualizarGrafico(grafico, idMaquina, idComponente, data) {
 
-        fetch(`/medidas/registrosTempoReal/${idMaquina}`, { cache: 'no-store' }).then(function (resposta) {
+        fetch(`/medidas/registrosTempoReal/${idEmpresa}/${idMaquina}/${idComponente}`, { cache: 'no-store' }).then(function (resposta) {
             if (resposta.ok) {
                 resposta.json().then(function (novoPonto) {
                     console.log(`Novo dado recebido: ${JSON.stringify(novoPonto)}`);
                     console.log(`Dados atuais do gŕafico: ${data}`);
-                    // retorno.reverse();
+
+                    console.log("ME AJUDA SENHOR: " + data.datasets.length);
 
                     data.labels.shift(); // apagar o primeiro
-                    data.labels.push(novoPonto[0].momento_grafico); // incluir um novo momento
+                    data.labels.push(novoPonto[0].momento); // incluir um novo momento
 
                     data.datasets[0].data.shift();  // apagar o primeiro de temperatura
                     data.datasets[0].data.push(novoPonto[0].registro); // incluir uma nova medida de temperatura
 
                     console.log(data)
 
-                    grafico.update('none');
+                    grafico.update();
                     console.log("Update realizado");
 
-                    proximaAtt = setTimeout(() => atualizarGrafico(grafico, idMaquina, data), 12000);
+                    proximaAtt = setTimeout(() => atualizarGrafico(grafico, idMaquina, idComponente, data), 4000);
                 })
             } else {
                 console.error('Nada foi encontrado!');
-                proximaAtt = setTimeout(() => atualizarGrafico(grafico, idMaquina, data), 12000);
+                proximaAtt = setTimeout(() => atualizarGrafico(grafico, idMaquina, idComponente, data), 4000);
             }
         });
 
     }
 
+}
+
+
+
+function graficosMedia(idMaquina){
     fetch("/medidas/mediaUsoComponente").then(function (retorno) {
         if (retorno.ok) {
             if (retorno == 204) {
@@ -182,20 +174,20 @@ function gerar(idMaquina) {
             }
             retorno.json().then(function (resposta) {
                 console.log("Médias Recebidas: ", JSON.stringify(resposta));
-
+    
                 plotarGraficoMedia(resposta, idMaquina);
-
+    
                 // for(var i = 0; i < resposta.length; i++){
-
+    
                 //     var dadosMaquina = resposta[i];
-
+    
                 //     var botao = document.createElement("button");
                 //     botao.setAttribute("id", `botaoMaquina${dadosMaquina.idMaquina}`);
                 //     botao.setAttribute("onClick", `gerar(${dadosMaquina.idMaquina})`);
                 //     botao.innerHTML = `${dadosMaquina.nome}`;
                 //     document.getElementById("area_botoes").appendChild(botao);
-
-
+    
+    
                 // }
             })
         }
@@ -206,14 +198,14 @@ function gerar(idMaquina) {
         var titulo = document.createElement("h1");
         titulo.innerHTML = `Média Uso Componentes`;
         area_grafico.appendChild(titulo);
-
+    
         for (var i = 0; i < retorno.length; i++) {
-
+    
             if (idMaquina == retorno[i].idMaquina) {
                 console.log("teste 1: " + retorno[i].nomeComponente);
                 console.log("teste 2: " + retorno[i].MediaUso);
                 console.log("teste 3: " + 100 - retorno[i].MediaUso);
-
+    
                 const dataMedia = {
                     labels: [
                         'Porcentagem Usada',
@@ -229,28 +221,28 @@ function gerar(idMaquina) {
                         hoverOffset: 4
                     }]
                 };
-
+    
                 const config = {
                     type: 'doughnut',
                     data: dataMedia,
                 };
-
+    
                 var h3Nome = document.createElement("h3");
                 h3Nome.innerHTML = retorno[i].nomeComponente;
-
+    
                 var div = document.createElement("div");
                 var canva = document.createElement("canvas");
                 canva.setAttribute('id', `graficoMedia${retorno[i].fkComponente}`);
                 div.appendChild(h3Nome);
                 div.appendChild(canva);
                 document.getElementById("area_grafico").appendChild(div);
-
+    
                 window.grafico = new Chart(
                     document.getElementById(`graficoMedia${retorno[i].fkComponente}`),
                     config
                 );
             }
-
+    
         }
     }
 }

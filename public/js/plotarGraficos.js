@@ -35,55 +35,45 @@ function gerar(idEmpresa, idMaquina) {
     titulo.innerHTML = `Monitoramento`;
     area_grafico.appendChild(titulo);
 
-    fetch(`/medidas/buscarComponentesMaquina/${idEmpresa}/${idMaquina}`, { cache: 'no-store' }).then(function (resposta){
-        if(resposta.ok){
-            resposta.json().then(function (retorno){
-                console.log(`Dados recebidos: ${JSON.stringify(retorno)}`);
+    fetch(`/medidas/buscarComponentesMaquina/${idEmpresa}/${idMaquina}`, {
+        cache: 'no-store'
+    }).then(function (resposta) {
+        if (resposta.ok) {
+            resposta.json().then(function (retorno) {
+                console.log(`Dados recebidos dos componentes: ${JSON.stringify(retorno)}`);
 
-                var vetorComponentes = [];
-
-                for(var i = 0; i < retorno.length; i++){
-                    vetorComponentes.push(retorno[i].fkComponente);
+                for (var i = 0; i < retorno.length; i++) {
+                    gerarGrafico(retorno[i].fkComponente);
                 }
+                graficosMedia(idMaquina);
 
-                gerarGrafico(vetorComponentes);
 
             })
         }
     });
 
 
-    function gerarGrafico(vetorComponentes){
-
-        for(var i = 0; i < vetorComponentes.length; i++){
-            var idComponente = vetorComponentes[i];
-            fetch(`/medidas/ultimosRegistros/${idEmpresa}/${idMaquina}/${idComponente}`, { cache: 'no-store' }).then(function (resposta) {
-                if (resposta.ok) {
-                    resposta.json().then(function (retorno) {
-                        console.log(`Dados recebidos: ${JSON.stringify(retorno)}`);
-                        // retorno.reverse();
-        
-                        configurarGraficoMon(retorno, idComponente);
-
-                        graficosMedia(idMaquina);
-        
-                    })
-                } else {
-                    console.error('Nada foi encontrado!');
-                }
-            });
-        }
-
-    }    
+    function gerarGrafico(idComponente) {
+        fetch(`/medidas/ultimosRegistros/${idEmpresa}/${idMaquina}/${idComponente}`, {
+            cache: 'no-store'
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(function (retorno) {
+                    console.log(`Dados recebidos: ${JSON.stringify(retorno)}`);
+                    configurarGraficoMon(retorno, idComponente);
+                })
+            } else {
+                console.error('Nada foi encontrado!');
+            }
+        });
+    }
 
     function configurarGraficoMon(retorno, idComponente) {
-
-        console.log("CHEGOU AQUI:")
 
         var vetorData = [];
         var vetorRegistro = [];
 
-        for(var i = 0; i < retorno.length; i++){
+        for (var i = 0; i < retorno.length; i++) {
             var tupla = retorno[i];
             vetorData.push(tupla.momento);
             vetorRegistro.push(tupla.registro);
@@ -127,46 +117,41 @@ function gerar(idEmpresa, idMaquina) {
             config,
         );
 
-        setTimeout(() => atualizarGrafico(graficoMon, idMaquina, idComponente, data), 4000);
+        setTimeout(() => atualizarGrafico(idEmpresa, idMaquina, idComponente, data), 5000);
 
-    }
+        function atualizarGrafico(idEmpresa, idMaquina, fkComponente, data) {
+            fetch(`/medidas/registrosTempoReal/${idEmpresa}/${idMaquina}/${fkComponente}`, {
+                cache: 'no-store'
+            }).then(function (resposta) {
+                if (resposta.ok) {
+                    resposta.json().then(function (novoPonto) {
+                        console.log(`Novo dado recebido: ${JSON.stringify(novoPonto)}`);
+                        console.log(`Dados atuais do gŕafico: ${data}`);
 
-    function atualizarGrafico(grafico, idMaquina, idComponente, data) {
+                        console.log("ME AJUDA SENHOR: " + data.datasets.length);
 
-        fetch(`/medidas/registrosTempoReal/${idEmpresa}/${idMaquina}/${idComponente}`, { cache: 'no-store' }).then(function (resposta) {
-            if (resposta.ok) {
-                resposta.json().then(function (novoPonto) {
-                    console.log(`Novo dado recebido: ${JSON.stringify(novoPonto)}`);
-                    console.log(`Dados atuais do gŕafico: ${data}`);
+                        data.labels.shift();
+                        data.labels.push(novoPonto[0].momento);
 
-                    console.log("ME AJUDA SENHOR: " + data.datasets.length);
+                        data.datasets[0].data.shift();
+                        data.datasets[0].data.push(novoPonto[0].registro);
 
-                    data.labels.shift(); // apagar o primeiro
-                    data.labels.push(novoPonto[0].momento); // incluir um novo momento
+                        graficoMon.update();
 
-                    data.datasets[0].data.shift();  // apagar o primeiro de temperatura
-                    data.datasets[0].data.push(novoPonto[0].registro); // incluir uma nova medida de temperatura
-
-                    console.log(data)
-
-                    grafico.update();
-                    console.log("Update realizado");
-
-                    proximaAtt = setTimeout(() => atualizarGrafico(grafico, idMaquina, idComponente, data), 4000);
-                })
-            } else {
-                console.error('Nada foi encontrado!');
-                proximaAtt = setTimeout(() => atualizarGrafico(grafico, idMaquina, idComponente, data), 4000);
-            }
-        });
+                        proximaAtt = setTimeout(() => atualizarGrafico(idEmpresa, idMaquina, idComponente, data), 5000);
+                    })
+                } else {
+                    console.error('Nada foi encontrado!');
+                    proximaAtt = setTimeout(() => atualizarGrafico(idEmpresa, idMaquina, idComponente, data), 5000);
+                }
+            })
+        }
 
     }
 
 }
 
-
-
-function graficosMedia(idMaquina){
+function graficosMedia(idMaquina) {
     fetch("/medidas/mediaUsoComponente").then(function (retorno) {
         if (retorno.ok) {
             if (retorno == 204) {
@@ -174,21 +159,9 @@ function graficosMedia(idMaquina){
             }
             retorno.json().then(function (resposta) {
                 console.log("Médias Recebidas: ", JSON.stringify(resposta));
-    
+
                 plotarGraficoMedia(resposta, idMaquina);
-    
-                // for(var i = 0; i < resposta.length; i++){
-    
-                //     var dadosMaquina = resposta[i];
-    
-                //     var botao = document.createElement("button");
-                //     botao.setAttribute("id", `botaoMaquina${dadosMaquina.idMaquina}`);
-                //     botao.setAttribute("onClick", `gerar(${dadosMaquina.idMaquina})`);
-                //     botao.innerHTML = `${dadosMaquina.nome}`;
-                //     document.getElementById("area_botoes").appendChild(botao);
-    
-    
-                // }
+
             })
         }
     })
@@ -198,14 +171,11 @@ function graficosMedia(idMaquina){
         var titulo = document.createElement("h1");
         titulo.innerHTML = `Média Uso Componentes`;
         area_grafico.appendChild(titulo);
-    
+
         for (var i = 0; i < retorno.length; i++) {
-    
+
             if (idMaquina == retorno[i].idMaquina) {
-                console.log("teste 1: " + retorno[i].nomeComponente);
-                console.log("teste 2: " + retorno[i].MediaUso);
-                console.log("teste 3: " + 100 - retorno[i].MediaUso);
-    
+
                 const dataMedia = {
                     labels: [
                         'Porcentagem Usada',
@@ -221,28 +191,28 @@ function graficosMedia(idMaquina){
                         hoverOffset: 4
                     }]
                 };
-    
+
                 const config = {
                     type: 'doughnut',
                     data: dataMedia,
                 };
-    
+
                 var h3Nome = document.createElement("h3");
                 h3Nome.innerHTML = retorno[i].nomeComponente;
-    
+
                 var div = document.createElement("div");
                 var canva = document.createElement("canvas");
                 canva.setAttribute('id', `graficoMedia${retorno[i].fkComponente}`);
                 div.appendChild(h3Nome);
                 div.appendChild(canva);
                 document.getElementById("area_grafico").appendChild(div);
-    
+
                 window.grafico = new Chart(
                     document.getElementById(`graficoMedia${retorno[i].fkComponente}`),
                     config
                 );
             }
-    
+
         }
     }
 }

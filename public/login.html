@@ -37,11 +37,11 @@
                 <section id="form_empresa">
                     <h3>Realize seu login:</h3>
                     <div class="form">
-                        <label for="inp_email_empresa">E-mail:</label>
-                        <input id="inp_email_empresa">
-                        <label for="inp_senha_empresa">Senha:</label>
-                        <input id="inp_senha_empresa">
-                        <button onclick="navegar()">Entrar</button>
+                        <label for="inp_email">E-mail:</label>
+                        <input id="inp_email">
+                        <label for="inp_senha">Senha:</label>
+                        <input id="inp_senha">
+                        <button onclick="entrar()">Entrar</button>
                         <label>Ainda não cadastrou sua empresa?</label>
                         <a id="tag_a_para_tela_cadastro" href="cadastro.html">Cadastrar</a>
                     </div>
@@ -61,20 +61,11 @@
 
     function entrar() {
 
-        var emailVar = email_log_input.value;
-        var senhaVar = senha_log_input.value;
+        var emailVar = inp_email.value;
+        var senhaVar = inp_senha.value;
 
         if (emailVar == "" || senhaVar == "") {
-            mensagem_erro.classList.add("alerta")
-            mensagem_erro.style.display = "flex";
-            mensagem_erro.innerHTML = "Por favor não deixe nenhum campo em branco";
-            setTimeout(() => {
-                mensagem_erro.style.display = "none";
-                mensagem_erro.classList.remove("alerta");
-                mensagem_erro.innerHTML = "";
-            }, "5000")
-            return false
-
+            alert("CAMPO EM BRANCO");
         }
 
         console.log("FORM LOGIN: ", emailVar);
@@ -95,9 +86,7 @@
             if (resposta.ok) {
                 console.log(resposta);
 
-                mensagem_erro.classList.add("ok")
-                mensagem_erro.style.display = "flex";
-                mensagem_erro.innerHTML = "Login realizado, redirecionando para a dashboard";
+                alert("LOGOU SIM!")
 
                 resposta.json().then(json => {
 
@@ -105,13 +94,13 @@
                     console.log(json);
                     console.log(JSON.stringify(json));
 
-                    sessionStorage.EMAIL_USUARIO = json.email;
-                    sessionStorage.NOME_USUARIO = json.nome;
-                    sessionStorage.ID_USUARIO = json.id;
+                    sessionStorage.EMAIL_USUARIO = json.emailUsuario;
+                    sessionStorage.NOME_USUARIO = json.nomeUsuario;
+                    sessionStorage.ID_USUARIO = json.idEmpresa;
 
-                    setTimeout(function () {
-                        window.location = "index.html";
-                    }, 4000); // apenas para exibir o loading
+                    
+                    window.location = "index.html";
+                     // apenas para exibir o loading
 
                 });
 
@@ -119,6 +108,7 @@
 
                 console.log("Houve um erro ao tentar realizar o login!");
 
+                /*
                 resposta.text().then(texto => {
                     mensagem_erro.classList.add("erro")
                     mensagem_erro.style.display = "flex";
@@ -129,6 +119,7 @@
                         mensagem_erro.innerHTML = "";
                     }, "5000")
                 });
+                */
             }
 
         }).catch(function (erro) {

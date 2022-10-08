@@ -1,0 +1,130 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
+
+:root {
+    --verde-samp: #4d9e4194;
+    --preto-back: #1e1e1e;
+    --preto-header: #0e0e0e;
+    --preto-menu-div: #161616;
+}
+
+body {
+    margin: 0;
+}
+h1,h2,h3 {
+    color: white;
+    opacity: 70%;
+    font-family: 'Poppins', sans-serif;
+    margin: 10px 0px 0px 10px;
+}
+
+.header_dash {
+   
+    width: 100%;
+    height: 50px;
+    background-color: var(--preto-header);
+    border-bottom: 2px solid var(--verde-samp);
+}
+
+.menu, .header_dash {
+    position: sticky;
+}
+
+.menu {
+    background-color: var(--preto-menu-div);
+    width: 100px;
+    height: 100vh;
+    float: left;
+    border-right: 2px solid var(--verde-samp);
+}
+
+.dash {
+    display: flex;
+}
+
+.main div {
+    border-radius: 10px;
+    
+}
+
+.main {
+    width: 100%;
+    height: 1000px;
+    background-color: var(--preto-back);
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+}
+
+.geral {
+    height: 60%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+.fr1,.fr2 {
+    width: 45%;
+    height: 100%;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.processos {
+    width: 100%;
+    height: 55%;
+    background-color: var(--preto-menu-div);
+    border: solid 1px var(--verde-samp);
+}
+
+.info_maquina {
+    width: 100%;
+    height: 40%;
+    background-color: var(--preto-menu-div);
+    border: solid 1px var(--verde-samp);
+}
+
+.cpu_ram {
+    width: 100%;
+    height: 55%;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+
+.uso_cpu, .uso_ram {
+    height: 48%;
+    width: 100%;
+    background-color: var(--preto-menu-div);
+    border: solid 1px var(--verde-samp);
+}
+
+.disco_rede {
+    height: 40%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.uso_rede, .disco {
+    height: 100%;
+    width: 48%;
+    background-color: var(--preto-menu-div);
+    border: solid 1px var(--verde-samp);
+}
+
+.alertas {
+    width: 93.33333333%;
+    height: 35%;
+    background-color: var(--preto-menu-div);
+    border: solid 1px var(--verde-samp);
+   
+}
+

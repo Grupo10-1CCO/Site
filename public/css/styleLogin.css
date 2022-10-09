@@ -1,4 +1,4 @@
-/* FONTES */
+/* FONTES
 @font-face {
     font-family: OswaldRegular;
     src: url(../assests/fonts/Oswald-Regular.ttf);
@@ -7,7 +7,9 @@
 @font-face {
     font-family: NunitoRegular;
     src: url(../assests/fonts/Nunito-Regular.ttf);
-}
+} */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Jockey+One&display=swap');
 /* FONTES */
 /* ====================================================== */
 /* BODY */

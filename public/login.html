@@ -9,7 +9,6 @@
     <link rel="icon" type="image/x-icon" href="assets/LogoSimbolo.png">
     <!-- <script src="./js/funcoes.js"></script> -->
     <title>SAMP</title>
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
@@ -40,7 +39,7 @@
                         <label for="inp_email">E-mail:</label>
                         <input id="inp_email">
                         <label for="inp_senha">Senha:</label>
-                        <input id="inp_senha">
+                        <input id="inp_senha" type="password">
                         <button onclick="entrar()">Entrar</button>
                         <label>Ainda não cadastrou sua empresa?</label>
                         <a id="tag_a_para_tela_cadastro" href="cadastro.html">Cadastrar</a>
@@ -55,200 +54,7 @@
 
 </body>
 
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/funcoes.js"></script>
+
 </html>
-
-<script>
-
-    function entrar() {
-
-        var emailVar = inp_email.value;
-        var senhaVar = inp_senha.value;
-
-        if (emailVar == "" || senhaVar == "") {
-            alert("CAMPO EM BRANCO");
-        }
-
-        console.log("FORM LOGIN: ", emailVar);
-        console.log("FORM SENHA: ", senhaVar);
-
-        fetch("/usuarios/autenticar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                emailServer: emailVar,
-                senhaServer: senhaVar
-            })
-        }).then(function (resposta) {
-            console.log("ESTOU NO THEN DO entrar()!")
-
-            if (resposta.ok) {
-                console.log(resposta);
-
-                alert("LOGOU SIM!")
-
-                resposta.json().then(json => {
-
-
-                    console.log(json);
-                    console.log(JSON.stringify(json));
-
-                    sessionStorage.EMAIL_USUARIO = json.emailUsuario;
-                    sessionStorage.NOME_USUARIO = json.nomeUsuario;
-                    sessionStorage.ID_USUARIO = json.idEmpresa;
-
-                    
-                    window.location = "index.html";
-                     // apenas para exibir o loading
-
-                });
-
-            } else {
-
-                console.log("Houve um erro ao tentar realizar o login!");
-
-                /*
-                resposta.text().then(texto => {
-                    mensagem_erro.classList.add("erro")
-                    mensagem_erro.style.display = "flex";
-                    mensagem_erro.innerHTML = texto;
-                    setTimeout(() => {
-                        mensagem_erro.style.display = "none";
-                        mensagem_erro.classList.remove("alerta");
-                        mensagem_erro.innerHTML = "";
-                    }, "5000")
-                });
-                */
-            }
-
-        }).catch(function (erro) {
-            console.log(erro);
-        })
-
-        return false;
-    }
-
-
-    function cadastrar() {
-        //Recupere o valor da nova input pelo nome do id
-        // Agora vá para o método fetch logo abaixo
-        // var nome = nome_input.value;
-        // var email = email_cad_input.value;
-        // var senha = senha_cad_input.value;
-        // var confirmacaoSenha = conf_senha_input.value;
-        // var cargo = cargo_cad_input.value;
-        // var fkEmpresa = fkEmpresa_cad_input.value;
-        // // usuario ^^^
-        // // Empresa VVV
-        // var nomeEmpresa = nomeEmpresa_input.value;
-        // var emailEmpresa = emailEmpresa_input.value;
-        // var cnpj = cnpj_input.value;
-       
-        var nome = "Filipe";
-        var email = "Filipe@email.com";
-        var senha = 1234;
-        var confirmacaoSenha = 1234;
-        var fkEmpresa = 1;
-        // usuario ^^^
-        // Empresa VVV
-        var nomeEmpresa = "Itau";
-        var emailEmpresa = "Itau@itaudominio.com";
-        var cnpj = "11111111111111";
-
-
-        if (nome == "" || email == "" || senha == "" || confirmacaoSenha == "") {
-            mensagem_erro.classList.add("alerta")
-            mensagem_erro.style.display = "flex";
-            mensagem_erro.innerHTML = "Por favor não deixe nenhum campo em branco";
-            setTimeout(() => {
-                mensagem_erro.style.display = "none";
-                mensagem_erro.classList.remove("alerta");
-                mensagem_erro.innerHTML = "";
-            }, "5000")
-
-            return false;
-        }
-        else if (confirmacaoSenha != senha) {
-            mensagem_erro.classList.add("erro")
-            mensagem_erro.style.display = "flex";
-            mensagem_erro.innerHTML = "Senhas não coincidem";
-            setTimeout(() => {
-                mensagem_erro.style.display = "none";
-                mensagem_erro.classList.remove("erro");
-                mensagem_erro.innerHTML = "";
-            }, "5000")
-
-            return false;
-        }
-
-        // Enviando o valor da nova input
-        fetch("/usuarios/cadastrar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                // crie um atributo que recebe o valor recuperado aqui
-                // Agora vá para o arquivo routes/usuario.js
-                nomeServer: nome,
-                emailServer: email,
-                senhaServer: senha,
-                fkEmpresaServer: fkEmpresa,
-                // Empresa VVV
-                nomeEmpresaServer: nomeEmpresa,
-                emailEmpresaServer: emailEmpresa,
-                cnpjServer: cnpj
-                
-            })
-        }).then(function (resposta) {
-
-            console.log("resposta: ", resposta);
-
-            if (resposta.ok) {
-                mensagem_erro.classList.add("ok");
-                mensagem_erro.style.display = "flex";
-
-                mensagem_erro.innerHTML = "Cadastro realizado com sucesso!";
-
-                nome_input.value = "";
-                email_cad_input.value = "";
-                senha_cad_input.value = "";
-                cnpj_input.value = "";
-                conf_senha_input.value = "";
-
-                setTimeout(() => {
-                    mensagem_erro.style.display = "none";
-                    mensagem_erro.classList.remove("ok");
-                    mensagem_erro.innerHTML = "";
-                    botao_login();
-                }, "5000")
-
-            } else {
-                throw ("Houve um erro ao tentar realizar o cadastro!");
-            }
-        }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`);
-        });
-
-        return false;
-    }
-</script>
-
-<script>
-
-    function botao_cadastro() {
-        cadastro_mostrar.style.display = 'block';
-        login_mostrar.style.display = 'none';
-        header_cadastro.style.color = '#4CFA91';
-        header_login.style.color = '#000000';
-    }
-
-    function botao_login() {
-        cadastro_mostrar.style.display = 'none';
-        login_mostrar.style.display = 'block';
-        header_cadastro.style.color = '#000000';
-        header_login.style.color = '#4CFA91';
-    }
-
-</script>

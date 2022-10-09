@@ -1,3 +1,68 @@
+// import Swal from 'sweetalert2'
+
+function entrar() {
+
+    var emailVar = inp_email.value;
+    var senhaVar = inp_senha.value;
+
+    if (emailVar == "" || senhaVar == "") {
+        Swal.fire({
+            title: 'Erro!',
+            text: 'Preencha todos os campos!',
+            icon: 'error',
+            timer: 3000
+        })
+    }else{
+        console.log("FORM LOGIN: ", emailVar);
+        console.log("FORM SENHA: ", senhaVar);
+    
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailServer: emailVar,
+                senhaServer: senhaVar
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+    
+            if (resposta.ok) {
+                console.log(resposta);
+    
+                resposta.json().then(json => {
+    
+    
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+    
+                    sessionStorage.EMAIL_USUARIO = json.emailUsuario;
+                    sessionStorage.NOME_USUARIO = json.nomeUsuario;
+                    sessionStorage.ID_USUARIO = json.idEmpresa;
+    
+                    
+                    window.location = "dashboard/dashboard.html";
+                     // apenas para exibir o loading
+    
+                });
+            } else {
+                Swal.fire({
+                    title: 'Erro!',
+                    text: 'E-mail ou senha inválidos!!',
+                    icon: 'error',
+                    timer: 3000
+                });
+            }
+    
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+    }
+
+    return false;
+}
+
 // sessão
 function validarSessao() {
     // aguardar();

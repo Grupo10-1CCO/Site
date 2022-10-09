@@ -29,15 +29,13 @@ function gerar(idEmpresa, idMaquina) {
 
     plotarBotoes();
 
-    area_grafico.innerHTML = '';
+    // area_grafico.innerHTML = '';
 
-    var titulo = document.createElement("h1");
-    titulo.innerHTML = `Monitoramento`;
-    area_grafico.appendChild(titulo);
+    // var titulo = document.createElement("h1");
+    // titulo.innerHTML = `Monitoramento`;
+    // area_grafico.appendChild(titulo);
 
-    fetch(`/medidas/buscarComponentesMaquina/${idEmpresa}/${idMaquina}`, {
-        cache: 'no-store'
-    }).then(function (resposta) {
+    fetch(`/medidas/buscarComponentesMaquina/${idEmpresa}/${idMaquina}`, {cache: 'no-store'}).then(function (resposta) {
         if (resposta.ok) {
             resposta.json().then(function (retorno) {
                 console.log(`Dados recebidos dos componentes: ${JSON.stringify(retorno)}`);
@@ -70,6 +68,10 @@ function gerar(idEmpresa, idMaquina) {
 
     function configurarGraficoMon(retorno, idComponente) {
 
+        // var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        // gradient.addColorStop(0, 'rgba(214, 31, 31, 0.5)');   
+        // gradient.addColorStop(1, 'rgba(214, 31, 31, 0)');
+
         var vetorData = [];
         var vetorRegistro = [];
 
@@ -83,39 +85,91 @@ function gerar(idEmpresa, idMaquina) {
             labels: vetorData,
             datasets: [{
                 label: `Componente: ${retorno[0].nomeComponente} | Unidade de Medida: ${retorno[0].unidadeMedida}`,
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: vetorRegistro
+                backgroundColor: 'rgba(255, 250, 250, 0.8)',
+                borderColor: 'rgba(255, 250, 250, 0.8)',
+                data: vetorRegistro,
+                fill: true,
+                tension: 0.5
             }]
         }
 
         var config = {
             type: 'line',
             data: data,
+            backgroundColor: '#1E1E1E',
             options: {
                 scales: {
                     y: {
                         min: 0,
-                        max: 100
+                        max: 100,
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: 'white',
+                            font:{
+                                size: 10
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: 'white',
+                            font:{
+                                size: 10
+                            }
+                        }
                     }
-                }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white',
+                            font:{
+                                size: 10
+                            }
+                        }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
             }
         };
 
         var h3Nome = document.createElement("h3");
         h3Nome.innerHTML = retorno[0].nomeComponente;
 
-        var div = document.createElement("div");
-        var canva = document.createElement("canvas");
-        canva.setAttribute('id', `grafico${retorno[0].fkComponente}`);
-        div.append(h3Nome);
-        div.appendChild(canva);
-        document.getElementById("area_grafico").appendChild(div);
+        var nomeComponente = retorno[0].nomeComponente;
+        var nomeSplit = nomeComponente.substring(0,3);
 
-        var graficoMon = new Chart(
-            document.getElementById(`grafico${retorno[0].fkComponente}`),
-            config,
-        );
+        if(nomeSplit == "CPU"){
+            var graficoMon = new Chart(
+                document.getElementById(`graficoCpu`),
+                config,
+            );
+        }else if(nomeSplit == "RAM"){
+            var graficoMon = new Chart(
+                document.getElementById(`graficoRam`),
+                config,
+            );
+        }else{
+
+        }
+
+        // var div = document.createElement("div");
+        // var canva = document.createElement("canvas");
+        // canva.setAttribute('id', `grafico${retorno[0].fkComponente}`);
+        // div.append(h3Nome);
+        // div.appendChild(canva);
+        // document.getElementById("area_grafico").appendChild(div);
+
+        // var graficoMon = new Chart(
+        //     document.getElementById(`grafico${retorno[0].fkComponente}`),
+        //     config,
+        // );
 
         setTimeout(() => atualizarGrafico(idEmpresa, idMaquina, idComponente, data), 5000);
 
@@ -136,7 +190,7 @@ function gerar(idEmpresa, idMaquina) {
                         data.datasets[0].data.shift();
                         data.datasets[0].data.push(novoPonto[0].registro);
 
-                        graficoMon.update();
+                        graficoMon.update('none');
 
                         proximaAtt = setTimeout(() => atualizarGrafico(idEmpresa, idMaquina, idComponente, data), 5000);
                     })

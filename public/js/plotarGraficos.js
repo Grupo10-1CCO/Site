@@ -1,3 +1,4 @@
+// Mexer quando for fazer os links para maquinas
 function plotarBotoes() {
     area_botoes.innerHTML = '';
 
@@ -27,7 +28,8 @@ function plotarBotoes() {
 
 function gerar(idEmpresa, idMaquina) {
 
-    plotarBotoes();
+    // Mexer quando for fazer os links para maquinas
+    // plotarBotoes();
 
     // area_grafico.innerHTML = '';
 
@@ -72,91 +74,133 @@ function gerar(idEmpresa, idMaquina) {
         // gradient.addColorStop(0, 'rgba(214, 31, 31, 0.5)');   
         // gradient.addColorStop(1, 'rgba(214, 31, 31, 0)');
 
-        var vetorData = [];
-        var vetorRegistro = [];
+        var nomeComponente = retorno[0].nomeComponente;
+        var nomeSplit = nomeComponente.substring(0,3);
 
-        for (var i = 0; i < retorno.length; i++) {
-            var tupla = retorno[i];
-            vetorData.push(tupla.momento);
-            vetorRegistro.push(tupla.registro);
-        }
+        if(nomeSplit == "CPU" || nomeSplit == "RAM"){
+            var vetorData = [];
+            var vetorRegistro = [];
 
-        var data = {
-            labels: vetorData,
-            datasets: [{
-                label: `Componente: ${retorno[0].nomeComponente} | Unidade de Medida: ${retorno[0].unidadeMedida}`,
-                backgroundColor: 'rgba(255, 250, 250, 0.8)',
-                borderColor: 'rgba(255, 250, 250, 0.8)',
-                data: vetorRegistro,
-                fill: true,
-                tension: 0.5
-            }]
-        }
+            for (var i = 0; i < retorno.length; i++) {
+                var tupla = retorno[i];
+                vetorData.push(tupla.momento);
+                vetorRegistro.push(tupla.registro);
+            }
 
-        var config = {
-            type: 'line',
-            data: data,
-            backgroundColor: '#1E1E1E',
-            options: {
-                scales: {
-                    y: {
-                        min: 0,
-                        max: 100,
-                        grid: {
-                            display: false
+            var data = {
+                labels: vetorData,
+                datasets: [{
+                    label: `${retorno[0].nomeComponente} | Unidade de Medida: ${retorno[0].unidadeMedida}`,
+                    backgroundColor: 'rgba(255, 250, 250, 0.8)',
+                    borderColor: 'rgba(255, 250, 250, 0.8)',
+                    data: vetorRegistro,
+                    fill: true,
+                    tension: 0.5
+                }]
+            }
+    
+            var config = {
+                type: 'line',
+                data: data,
+                backgroundColor: '#1E1E1E',
+                options: {
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 100,
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: 'white',
+                                font:{
+                                    size: 10
+                                }
+                            }
                         },
-                        ticks: {
-                            color: 'white',
-                            font:{
-                                size: 10
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: 'white',
+                                font:{
+                                    size: 6
+                                }
                             }
                         }
                     },
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            color: 'white',
-                            font:{
-                                size: 10
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white',
+                                font:{
+                                    size: 10
+                                }
                             }
                         }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white',
-                            font:{
-                                size: 10
-                            }
-                        }
-                    }
-                },
-                responsive: true,
-                maintainAspectRatio: false,
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            };
+        }else{
+            var data = {
+                labels: ['Usado', 'Livre'],
+                datasets: [{
+                    label: `Teste`,
+                    backgroundColor: ['rgba(77, 158, 65, 0.58)', 'rgba(255, 250, 250, 0.8)'],
+                    borderColor: ['rgb(77, 158, 65', 'rgb(255, 250, 250)'],
+                    hoverBackgroundColor: ['rgb(77, 158, 65)', 'rgb(255, 250, 250)'],
+                    data: [retorno[0].registro, 100 - retorno[0].registro]
+                }]
             }
-        };
+    
+            var config = {
+                type: 'pie',
+                data: data,
+                backgroundColor: '#1E1E1E',
+                options: {
+                    plugins: {
+                        legend: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                text: 'Uso do Disco'
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            };
+        }
 
         var h3Nome = document.createElement("h3");
         h3Nome.innerHTML = retorno[0].nomeComponente;
-
-        var nomeComponente = retorno[0].nomeComponente;
-        var nomeSplit = nomeComponente.substring(0,3);
 
         if(nomeSplit == "CPU"){
             var graficoMon = new Chart(
                 document.getElementById(`graficoCpu`),
                 config,
             );
+
+            setTimeout(() => atualizarGrafico(idEmpresa, idMaquina, idComponente, data), 5000);
+
         }else if(nomeSplit == "RAM"){
             var graficoMon = new Chart(
                 document.getElementById(`graficoRam`),
                 config,
             );
-        }else{
 
+            setTimeout(() => atualizarGrafico(idEmpresa, idMaquina, idComponente, data), 5000);
+
+        }else{
+            var graficoMon = new Chart(
+                document.getElementById(`graficoDisco`),
+                config,
+            );
         }
 
         // var div = document.createElement("div");
@@ -170,8 +214,6 @@ function gerar(idEmpresa, idMaquina) {
         //     document.getElementById(`grafico${retorno[0].fkComponente}`),
         //     config,
         // );
-
-        setTimeout(() => atualizarGrafico(idEmpresa, idMaquina, idComponente, data), 5000);
 
         function atualizarGrafico(idEmpresa, idMaquina, fkComponente, data) {
             fetch(`/medidas/registrosTempoReal/${idEmpresa}/${idMaquina}/${fkComponente}`, {
@@ -190,7 +232,7 @@ function gerar(idEmpresa, idMaquina) {
                         data.datasets[0].data.shift();
                         data.datasets[0].data.push(novoPonto[0].registro);
 
-                        graficoMon.update('none');
+                        graficoMon.update();
 
                         proximaAtt = setTimeout(() => atualizarGrafico(idEmpresa, idMaquina, idComponente, data), 5000);
                     })

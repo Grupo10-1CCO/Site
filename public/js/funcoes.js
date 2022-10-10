@@ -39,7 +39,10 @@ function entrar() {
     
                     sessionStorage.EMAIL_USUARIO = json.emailUsuario;
                     sessionStorage.NOME_USUARIO = json.nomeUsuario;
-                    sessionStorage.ID_USUARIO = json.idEmpresa;
+                    sessionStorage.ID_USUARIO = json.idUsuario;
+                    sessionStorage.ID_EMPRESA = json.idEmpresa;
+                    sessionStorage.NOME_EMPRESA = json.nomeEmpresa;
+                    sessionStorage.CARGO_USUARIO = json.cargo;
     
                     
                     window.location = "dashboard/dashboard.html";
@@ -69,13 +72,15 @@ function validarSessao() {
 
     var email = sessionStorage.EMAIL_USUARIO;
     var nome = sessionStorage.NOME_USUARIO;
+    var idUsuario = sessionStorage.ID_USUARIO;
+    var cargo = sessionStorage.CARGO_USUARIO;
+    var nomeEmpresa = sessionStorage.NOME_EMPRESA;
+    var idEmpresa = sessionStorage.ID_EMPRESA;
 
-    var b_usuario = document.getElementById("b_usuario");
-
-    if (email != null && nome != null) {
+    if (email != null && nome != null && idUsuario != null && cargo != null && nomeEmpresa != null && idEmpresa != null) {
         // window.alert(`Seja bem-vindo, ${nome}!`);
-        b_usuario.innerHTML = nome;
-
+        var h3_empresa = document.getElementById("nome_empresa");
+        h3_empresa.innerHTML = `${nomeEmpresa}`;
         // finalizarAguardar();
     } else {
         window.location = "../login.html";

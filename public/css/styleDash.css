@@ -2,10 +2,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
 
 :root {
-    --verde-samp: rgba(77, 158, 65, 0.58);
+    --verde-samp: #4d9e4194;
     --preto-back: #1e1e1e;
     --preto-header: #0e0e0e;
     --preto-menu-div: #161616;
+    --verde-hover: #37702e94;
 }
 
 html {
@@ -39,7 +40,7 @@ body {
     width: 100%;
     height: 60px;
     background-color: var(--preto-header);
-    border-bottom: 2px solid var(--verde-samp);
+    border-bottom: 1px solid var(--verde-samp);
     position: sticky;
     top: 0;
     justify-content: center;
@@ -73,7 +74,7 @@ h1,h2,h3 {
     width: 150px;
     height: 100vh;
     float: left;
-    border-right: 2px solid var(--verde-samp);
+    border-right: 0.1px solid white;
 }
 
 .menu hr{
@@ -183,14 +184,14 @@ h1,h2,h3 {
     width: 100%;
     height: 55%;
     background-color: var(--preto-menu-div);
-    border: solid 1px var(--verde-samp);
+    
 }
 
 .info_maquina {
     width: 100%;
     height: 40%;
     background-color: var(--preto-menu-div);
-    border: solid 1px var(--verde-samp);
+    
 }
 
 .cpu_ram {
@@ -208,7 +209,7 @@ h1,h2,h3 {
     height: 48%;
     width: 100%;
     background-color: var(--preto-menu-div);
-    border: solid 1px var(--verde-samp);
+    
 }
 
 .disco_rede {
@@ -223,14 +224,14 @@ h1,h2,h3 {
     height: 100%;
     width: 48%;
     background-color: var(--preto-menu-div);
-    border: solid 1px var(--verde-samp);
+    
 }
 
 .alertas {
     width: 93.33333333%;
     height: 35%;
     background-color: var(--preto-menu-div);
-    border: solid 1px var(--verde-samp);
+    
    
 }
 
@@ -252,4 +253,40 @@ h1,h2,h3 {
 #graficoDisco{
     height: 100%;
     width: 100%;
+}
+
+/*cofiguração do adduser*/
+
+.container {
+    width: 90%;
+    height: 80%;
+}
+
+.botoes_user {
+    display: flex;
+    justify-content: space-between;
+}
+.botoes_user button {
+    border:none;
+    height: 50px;
+    width: 150px;
+    border-radius: 10px;
+    background-color: var(--verde-samp);
+    color: white;
+    font-family: 'Poppins';
+    font-weight: 700;
+}
+
+.botoes_user button:hover {
+    cursor: pointer;
+    background-color: #37702e94;
+    transition: 0.2s;
+}
+
+.lista_user {
+    width: 100%;
+    height: 50%;
+    background-color: var(--preto-menu-div);
+    margin-top: 2vh;
+    
 }

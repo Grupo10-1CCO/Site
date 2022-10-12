@@ -15,20 +15,18 @@
 
         <div class="header_dash">
             <nav class="nav_dash">
-                <!-- <img src="../assets/icons/burger-bar.png" class="icon-menu"> -->
-                <img src="../assets/Logo.png">
+                <div class="header_menu">
+                    <img src="../assets/icons/burger-bar.png" onclick="botaoMenu()">
+                </div>
+                <div class="header_logo">
+                    <img src="../assets/logobranca.png">
+                </div>
             </nav>
             
         </div>
 
-        <div class="menu">
+        <div class="menu" id="sidebar">
 
-            <ul>
-                <li>
-                    <a><img src="../assets/icons/burger-bar.png"></a>
-                </li>
-                <hr>
-            </ul>
             <h2 id="nome_empresa">C6</h2>
             <ul class="ul-maquinas">
                 <li class="item-selecionado">
@@ -109,3 +107,4 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../js/plotarGraficos.js"></script>
     <script src="../js/funcoes.js"></script>
+    <script src="../js/sidebar.js"></script>

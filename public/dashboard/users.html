@@ -70,7 +70,7 @@
                     <button>Editar usuário</button>
                     <button>Adicionar usuário</button>
                 </div>
-                <div class="lista_user">
+                <div id="lista_user">
 
                 </div>
             </div>
@@ -79,7 +79,47 @@
 </body>
 
 </html>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="../js/plotarGraficos.js"></script>
 <script src="../js/funcoes.js"></script>
+<script>
+    
+    var idEmpresa = sessionStorage.ID_EMPRESA
+    fetch("/usuarios/buscarFuncionarios", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idEmpresa: idEmpresa
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                
+                resposta.json().then(json => {
+                    
+                        console.log(JSON.stringify(json));
+                        console.log(json);
+
+                    for (var index = 0; index < json.length; index++) {
+
+                            idUsuario = json[index].idUsuario;
+                            nome = json[index].nome;
+                            email = json[index].email;
+                            senha = json[index].senha;
+                            cargo = json[index].cargo;
+                            
+                            lista_user.innerHTML += `<div class="box_user">
+                                                    ID: ${idUsuario} | Nome: ${nome} | E-mail: ${email} 
+                                                     | Cargo: ${cargo}
+                                                </div>`
+                        }
+                      
+                })
+            
+
+            } 
+
+        
+        })
+</script>

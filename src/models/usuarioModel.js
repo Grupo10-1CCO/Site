@@ -12,8 +12,17 @@ function listar() {
 function entrar(email, senha) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ", email, senha)
     var instrucao = `
-        SELECT * FROM UsuarioEmpresa 
-            WHERE emailUsuario = '${email}' AND senha = MD5('${senha}');
+        SELECT * FROM Usuario
+            WHERE email = '${email}' AND senha = MD5('${senha}');
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function buscarFuncionarios(idEmpresa) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function buscarLivros()");
+    var instrucao = `
+    select * from usuario where fkEmpresa = ${idEmpresa};
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
@@ -58,4 +67,5 @@ module.exports = {
     cadastrarEmpresa,
     selecionarUltimaEmpresa,
     listar,
+    buscarFuncionarios
 };

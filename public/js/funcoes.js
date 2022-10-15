@@ -5,13 +5,57 @@ function entrar() {
     var emailVar = inp_email.value;
     var senhaVar = inp_senha.value;
 
-    if (emailVar == "" || senhaVar == "") {
-        Swal.fire({
-            title: 'Erro!',
-            text: 'Preencha todos os campos!',
+    if (emailVar == "" && senhaVar == "") {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          
+          Toast.fire({
             icon: 'error',
-            timer: 3000
-        })
+            title: 'Preencha o email e a senha'
+          })
+    }else if(emailVar == ""){
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          
+          Toast.fire({
+            icon: 'error',
+            title: 'Email inválido'
+          })
+    }else if(senhaVar == ""){
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          
+          Toast.fire({
+            icon: 'error',
+            title: 'Senha inválido'
+          })
     }else{
         console.log("FORM LOGIN: ", emailVar);
         console.log("FORM SENHA: ", senhaVar);
@@ -51,20 +95,30 @@ function entrar() {
     
                 });
             } else {
-                Swal.fire({
-                    title: 'Erro!',
-                    text: 'E-mail ou senha inválidos!!',
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
+                  
+                  Toast.fire({
                     icon: 'error',
-                    timer: 3000
-                });
+                    title: 'Login ou senha inválidos'
+                  })
             }
     
         }).catch(function (erro) {
             console.log(erro);
         })
+        return false;
     }
-
-    return false;
+        
 }
 
 // sessão

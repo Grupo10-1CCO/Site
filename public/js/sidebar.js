@@ -10,6 +10,17 @@ function botaoMenu(){
     }
 }
 
+function guardar(idMaquina) {
+    sessionStorage.ID_MAQUINA = idMaquina;
+    sessionStorage.BOT_SELECIONADO = `maquina${idMaquina}`;
+    
+}
+
+function selecionarBotao(idBotao) {
+    
+    document.getElementById(idBotao).className = "item-selecionado"
+}
+
 var idEmpresa = sessionStorage.ID_EMPRESA
     fetch("/medidas/buscarServidores", {
             method: "POST",
@@ -31,10 +42,12 @@ var idEmpresa = sessionStorage.ID_EMPRESA
 
                             idMaquina = json[index].idMaquina;
                             serialMaquina = json[index].serialMaquina;
+                            nomeMaquina = json[index].nome;
+                            fkEmpresa = json[index].fkEmpresa;
                             
                             
                             ul_maquinas.innerHTML += `<li>
-                            <a><img src="../assets/icons/server.png">${serialMaquina}</a>
+                            <a href='dashboard.html' onclick="guardar(${idMaquina})" id="maquina${idMaquina}"><img src="../assets/icons/server.png">${nomeMaquina}</a>
                         </li>`
                         }
                       

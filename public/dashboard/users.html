@@ -21,18 +21,12 @@
 
     </div>
 
-    <div class="menu">
+    <div class="menu" id="sidebar">
 
-        <ul>
-            <li>
-                <a><img src="../assets/icons/burger-bar.png"></a>
-            </li>
-            <hr>
-        </ul>
         <h2 id="nome_empresa">C6</h2>
-        <ul class="ul-maquinas">
-            <li>
-                <a href="dashboard.html"><img src="../assets/icons/server.png">Servidor 01</a>
+        <ul id="ul_maquinas">
+          <!--  <li class="item-selecionado">
+                <a><img src="../assets/icons/server.png">Servidor 01</a>
             </li>
             <li>
                 <a><img src="../assets/icons/server.png">Servidor 02</a>
@@ -42,12 +36,12 @@
             </li>
             <li>
                 <a><img src="../assets/icons/server.png">Servidor 04</a>
-            </li>
+            </li>-->
             <li>
                 <a><img src="../assets/icons/bar-chart.png">Análise</a>
             </li>
-            <li class="item-selecionado">
-                <a><img src="../assets/icons/add-user.png">Funcionários</a>
+            <li>
+                <a href="users.html"><img src="../assets/icons/add-user.png">Funcionários</a>
             </li>
         </ul>
         <ul>
@@ -55,6 +49,8 @@
                 <a onclick="limparSessao()"><img src="../assets/icons/log-out.png">Sair</a>
             </li>
         </ul>
+
+    </div>
 
     </div>
 
@@ -82,6 +78,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="../js/plotarGraficos.js"></script>
 <script src="../js/funcoes.js"></script>
+<script src="../js/sidebar.js"></script>
 <script>
     var nomeEmpresa = sessionStorage.NOME_EMPRESA;
     nome_empresa.innerHTML = nomeEmpresa

@@ -19,6 +19,22 @@ function buscarMaquinas(){
     return database.executar(query);
 }
 
+function buscarServidores(idEmpresa){
+    var query = ``;
+
+    if(process.env.AMBIENTE_PROCESSO == "producao") {
+        // ADAPTAR
+    }else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento"){
+        query = `SELECT * FROM Maquina WHERE fkEmpresa = ${idEmpresa};`;
+    }else{
+        console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
+        return
+    }
+    console.log("Executando a instrução SQL: \n" + query);
+    return database.executar(query);
+}
+
+
 function buscarComponentesMaquina(idEmpresa, idMaquina){
     var query = ``;
 
@@ -176,7 +192,8 @@ module.exports = {
     buscarComponentesMaquina,
     buscarUltimosRegistros,
     buscarRegistroTempoReal,
-    mediaUsoComponente
+    mediaUsoComponente,
+    buscarServidores
     // buscarUltimasMedidas,
     // buscarMedidasEmTempoReal
 }

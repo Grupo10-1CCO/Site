@@ -107,6 +107,8 @@ h1,h2,h3 {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    color: #ffffff;
+    text-decoration: none;
     width: 100%;
 }
 

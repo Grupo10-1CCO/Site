@@ -9,3 +9,39 @@ function botaoMenu(){
         console.log("caiu em flex");
     }
 }
+
+var idEmpresa = sessionStorage.ID_EMPRESA
+    fetch("/medidas/buscarServidores", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idEmpresa: idEmpresa
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                
+                resposta.json().then(json => {
+                    
+                        console.log(JSON.stringify(json));
+                        console.log(json);
+
+                    for (var index = 0; index < json.length; index++) {
+
+                            idMaquina = json[index].idMaquina;
+                            serialMaquina = json[index].serialMaquina;
+                            
+                            
+                            ul_maquinas.innerHTML += `<li>
+                            <a><img src="../assets/icons/server.png">${serialMaquina}</a>
+                        </li>`
+                        }
+                      
+                })
+            
+
+            } 
+
+        
+        })

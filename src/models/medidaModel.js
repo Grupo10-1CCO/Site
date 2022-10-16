@@ -125,6 +125,26 @@ function mediaUsoComponente(){
     return database.executar(query);
 }
 
+function infoMaquina(idMaquina){
+    var query = '';
+
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+
+        // ADAPTAR
+
+        query = ``;
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        query = `SELECT * FROM InfoMaquina WHERE idMaquina = ${idMaquina}`;
+    } else {
+        console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
+        return
+    }
+
+    console.log("Executando a instrução SQL: \n" + query);
+    return database.executar(query);
+
+}
+
 // function buscarUltimasMedidas(idAquario, limite_linhas) {
 
 //     instrucaoSql = ''
@@ -193,7 +213,8 @@ module.exports = {
     buscarUltimosRegistros,
     buscarRegistroTempoReal,
     mediaUsoComponente,
-    buscarServidores
+    buscarServidores,
+    infoMaquina
     // buscarUltimasMedidas,
     // buscarMedidasEmTempoReal
 }

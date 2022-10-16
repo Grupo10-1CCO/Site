@@ -15,6 +15,10 @@ router.get("/buscarComponentesMaquina/:idEmpresa/:idMaquina", function (req, res
     medidaController.buscarComponentesMaquina(req, res);
 });
 
+router.get("/infoMaquina/:idMaquina", function(req, res){
+    medidaController.infoMaquina(req, res);
+});
+
 router.get("/ultimosRegistros/:idEmpresa/:idMaquina/:fkComponente", function (req, res){
     medidaController.buscarUltimosRegistros(req, res);
 });

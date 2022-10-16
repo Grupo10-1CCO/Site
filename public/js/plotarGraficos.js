@@ -1,3 +1,6 @@
+var quantidadeDiscos = 0;
+
+
 // Mexer quando for fazer os links para maquinas
 function plotarBotoes() {
     area_botoes.innerHTML = '';
@@ -28,6 +31,8 @@ function plotarBotoes() {
 
 function gerar(idEmpresa, idMaquina) {
 
+    
+
     // Mexer quando for fazer os links para maquinas
     // plotarBotoes();
 
@@ -39,14 +44,21 @@ function gerar(idEmpresa, idMaquina) {
 
     fetch(`/medidas/buscarComponentesMaquina/${idEmpresa}/${idMaquina}`, {cache: 'no-store'}).then(function (resposta) {
         if (resposta.ok) {
+            quantidadeDiscos = 0;
             resposta.json().then(function (retorno) {
                 console.log(`Dados recebidos dos componentes: ${JSON.stringify(retorno)}`);
 
+                var areaDiscoGeral = document.getElementById("area_disco");
+                var areaRam = document.getElementById("area_ram");
+                areaDiscoGeral.innerHTML = "";
+
+                areaRam.style.height = '55%';
+                areaDiscoGeral.style.height = '40%';
+                
                 for (var i = 0; i < retorno.length; i++) {
                     gerarGrafico(retorno[i].fkComponente);
                 }
-                graficosMedia(idMaquina);
-
+                // graficosMedia(idMaquina);
 
             })
         }
@@ -58,10 +70,32 @@ function gerar(idEmpresa, idMaquina) {
             cache: 'no-store'
         }).then(function (resposta) {
             if (resposta.ok) {
+                var areaDiscoGeral = document.getElementById("area_disco");
+                var areaRam = document.getElementById("area_ram");
                 resposta.json().then(function (retorno) {
                     console.log(`Dados recebidos: ${JSON.stringify(retorno)}`);
                     configurarGraficoMon(retorno, idComponente);
-                })
+
+                    console.log("Valor final disco: " + quantidadeDiscos);
+                
+                    if(quantidadeDiscos > 2){
+                        areaDiscoGeral.classList.remove("disco_rede");
+                        areaDiscoGeral.classList.add("disco_rede2");
+        
+                        areaRam.style.height = '40%';
+                        areaDiscoGeral.style.height = '55%';
+        
+                        var divsDisco = document.querySelectorAll('.disco');
+        
+                        var alturaIdeal = 100 / quantidadeDiscos;
+                        alturaIdeal = alturaIdeal - 1;
+        
+                        divsDisco.forEach(caixaDisco => {
+                            caixaDisco.style.height = `${alturaIdeal}%`;
+                        });
+                    }
+                });
+                
             } else {
                 console.error('Nada foi encontrado!');
             }
@@ -69,6 +103,8 @@ function gerar(idEmpresa, idMaquina) {
     }
 
     function configurarGraficoMon(retorno, idComponente) {
+        
+        
 
         // var gradient = ctx.createLinearGradient(0, 0, 0, 400);
         // gradient.addColorStop(0, 'rgba(214, 31, 31, 0.5)');   
@@ -78,6 +114,27 @@ function gerar(idEmpresa, idMaquina) {
         var nomeSplit = nomeComponente.substring(0,3);
 
         if(nomeSplit == "CPU" || nomeSplit == "RAM"){
+
+            if(nomeSplit == "CPU"){
+                var areaCpu = document.getElementById("divGraficoCpu");
+
+                document.getElementById("graficoCpu").remove();
+                var canvasCpu = document.createElement("canvas");
+                canvasCpu.setAttribute("class", "cnvGrafico");
+                canvasCpu.setAttribute("id", "graficoCpu");
+                areaCpu.append(canvasCpu);
+            }
+
+            if(nomeSplit == "RAM"){
+                var areaRam = document.getElementById("divGraficoRam");
+
+                document.getElementById("graficoRam").remove();
+                var canvasRam = document.createElement("canvas");
+                canvasRam.setAttribute("class", "cnvGrafico");
+                canvasRam.setAttribute("id", "graficoRam");
+                areaRam.append(canvasRam);
+            }
+
             var vetorData = [];
             var vetorRegistro = [];
 
@@ -125,7 +182,7 @@ function gerar(idEmpresa, idMaquina) {
                             ticks: {
                                 color: 'white',
                                 font:{
-                                    size: 6
+                                    size: 7
                                 }
                             }
                         }
@@ -145,6 +202,42 @@ function gerar(idEmpresa, idMaquina) {
                 }
             };
         }else{
+
+            quantidadeDiscos++;
+
+            console.log("Estou aumentando aqui: " + quantidadeDiscos);
+
+            var areaDiscoGeral = document.getElementById("area_disco");
+
+            var divDisco = document.createElement("div");
+            var tituloUsoDisco = document.createElement("h3");
+            var divGrafDisco = document.createElement("div");
+            var canvasGrafDisco = document.createElement("canvas");
+
+            divDisco.setAttribute("class", "disco");
+            divDisco.setAttribute("id", `div_disco${retorno[0].fkComponente}`);
+
+            tituloUsoDisco.innerHTML = `Uso do ${retorno[0].nomeComponente}`;
+
+            divGrafDisco.setAttribute("class", "divGrafico");
+            divGrafDisco.setAttribute("id", `divGraficoDisco${retorno[0].fkComponente}`);
+
+            canvasGrafDisco.setAttribute("class", "cnvGrafico");
+            canvasGrafDisco.setAttribute("id", `graficoDisco${retorno[0].fkComponente}`);
+
+            divGrafDisco.appendChild(canvasGrafDisco);
+            divDisco.appendChild(tituloUsoDisco);
+            divDisco.appendChild(divGrafDisco);
+            areaDiscoGeral.append(divDisco);
+
+            var areaDisco = document.getElementById(`divGraficoDisco${retorno[0].fkComponente}`);
+
+            document.getElementById(`graficoDisco${retorno[0].fkComponente}`).remove();
+            var canvasDisco = document.createElement("canvas");
+            canvasDisco.setAttribute("class", "cnvGrafico");
+            canvasDisco.setAttribute("id", `graficoDisco${retorno[0].fkComponente}`);
+            areaDisco.append(canvasDisco);
+
             var data = {
                 labels: ['Usado', 'Livre'],
                 datasets: [{
@@ -198,7 +291,7 @@ function gerar(idEmpresa, idMaquina) {
 
         }else{
             var graficoMon = new Chart(
-                document.getElementById(`graficoDisco`),
+                document.getElementById(`graficoDisco${retorno[0].fkComponente}`),
                 config,
             );
         }
@@ -232,7 +325,7 @@ function gerar(idEmpresa, idMaquina) {
                         data.datasets[0].data.shift();
                         data.datasets[0].data.push(novoPonto[0].registro);
 
-                        graficoMon.update();
+                        graficoMon.update('none');
 
                         proximaAtt = setTimeout(() => atualizarGrafico(idEmpresa, idMaquina, idComponente, data), 5000);
                     })
@@ -311,4 +404,39 @@ function graficosMedia(idMaquina) {
 
         }
     }
+}
+
+function buscarInfoMaquina(idMaquina){
+    fetch(`/medidas/infoMaquina/${idMaquina}`, {cache: 'no-store'}).then(function (retorno) {
+        if (retorno.ok) {
+            if (retorno == 204) {
+                console.log("Retorno vazio de informação da máquina!");
+            }
+            retorno.json().then(function (resposta) {
+                console.log("Informação da máquina recebida: ", JSON.stringify(resposta));
+                var areaInfo = document.getElementById("info_maquina");
+                areaInfo.innerHTML = "";
+                var h2Titulo = document.createElement("h2");
+                h2Titulo.innerHTML = "Informações da Máquina";
+                areaInfo.appendChild(h2Titulo);
+
+                for(var i = 0; i < resposta.length; i++){
+                    infoComponente = resposta[i];
+                    var paragrafo = document.createElement("p");
+                    nomeComponenteRetorno = infoComponente.nomeComponente.substring(0,3);
+                    if(nomeComponenteRetorno == "CPU"){
+                        paragrafo.innerHTML = "Processador: " + infoComponente.nomeComponente;
+                    }else if(nomeComponenteRetorno == "RAM"){
+                        paragrafo.innerHTML = "Memória RAM Total: " + infoComponente.tamanho + " GB";
+                    }else{
+                        paragrafo.innerHTML = infoComponente.nomeComponente + " - Espaço Total de Disco: " + infoComponente.tamanho + " GB";
+                    }
+                    areaInfo.appendChild(paragrafo);
+                }
+
+            })
+        }else{
+            console.log("VAI TOMAR NO CUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
+        }
+    })
 }

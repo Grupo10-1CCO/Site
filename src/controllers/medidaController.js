@@ -35,7 +35,7 @@ function buscarComponentesMaquina(req, res){
 
 function buscarUltimosRegistros(req, res){
 
-    const limite_linhas = 8;
+    const limite_linhas = 7;
 
     var idEmpresa = req.params.idEmpresa;
     var idMaquina = req.params.idMaquina;
@@ -109,13 +109,32 @@ function buscarServidores(req, res) {
         );
 }
 
+function infoMaquina(req, res){
+
+    var idMaquina = req.params.idMaquina;
+
+    medidaModel.infoMaquina(idMaquina).then(function (resultado){
+        if(resultado.length > 0){
+            res.status(200).json(resultado);
+        }else{
+            res.status(204).send("Não foram encontrados componentes da maquina do idMaquina informado!");
+        }
+    }).catch(function (erro){
+        console.log(erro);
+        console.log("Houve um erro ao tentar resgatar a média do uso dos componentes! Erro: " + erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    })
+
+}
+
 module.exports = {
     buscarMaquinas,
     buscarUltimosRegistros,
     buscarComponentesMaquina,
     buscarRegistroTempoReal,
     mediaUsoComponente,
-    buscarServidores
+    buscarServidores,
+    infoMaquina
     
     // buscarUltimasMedidas,
     // buscarMedidasEmTempoReal

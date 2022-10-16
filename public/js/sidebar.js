@@ -13,12 +13,16 @@ function botaoMenu(){
 function guardar(idMaquina) {
     sessionStorage.ID_MAQUINA = idMaquina;
     sessionStorage.BOT_SELECIONADO = `maquina${idMaquina}`;
-    
 }
 
 function selecionarBotao(idBotao) {
-    
-    document.getElementById(idBotao).className = "item-selecionado"
+    var ulMaquinas = document.getElementById("ul_maquinas");
+    let elementosFilhos = ulMaquinas.children;
+    for(var i = 0; i < elementosFilhos.length; i++){
+        elementosFilhos[i].classList.remove("item-selecionado");
+    }
+    var botaoSelecionado = document.getElementById(idBotao);
+    botaoSelecionado.classList.add("item-selecionado");
 }
 
 var idEmpresa = sessionStorage.ID_EMPRESA
@@ -45,9 +49,10 @@ var idEmpresa = sessionStorage.ID_EMPRESA
                             nomeMaquina = json[index].nome;
                             fkEmpresa = json[index].fkEmpresa;
                             
+                            var idBotao = `maquina${idMaquina}`;
                             
-                            ul_maquinas.innerHTML += `<li>
-                            <a href='dashboard.html' onclick="guardar(${idMaquina})" id="maquina${idMaquina}"><img src="../assets/icons/server.png">${nomeMaquina}</a>
+                            ul_maquinas.innerHTML += `<li id="maquina${idMaquina}">
+                            <a href='#' onclick="guardar(${idMaquina}), selecionarBotao('${idBotao}'), buscarInfoMaquina(${idMaquina}), gerar(${fkEmpresa},${idMaquina})"><img src="../assets/icons/server.png">${nomeMaquina}</a>
                         </li>`
                         }
                       

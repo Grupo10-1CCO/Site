@@ -11,10 +11,24 @@ function listar() {
 
 function entrar(email, senha) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ", email, senha)
-    var instrucao = `
+    var instrucao = ``;
+
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        instrucao = `
         SELECT * FROM UsuarioEmpresa 
-            WHERE emailUsuario = '${email}' AND senha = MD5('${senha}');
-    `;
+            WHERE emailUsuario = '${email}' AND senha = HashBytes('MD5', '${senha}');
+        `;
+    }else if(process.env.AMBIENTE_PROCESSO == "desenvolvimento"){
+        instrucao = `
+            SELECT * FROM UsuarioEmpresa 
+                WHERE emailUsuario = '${email}' AND senha = MD5('${senha}');
+        `;
+    }else{
+        console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
+        return
+    }
+
+        
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }

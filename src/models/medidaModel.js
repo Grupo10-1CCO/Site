@@ -23,7 +23,7 @@ function buscarServidores(idEmpresa){
     var query = ``;
 
     if(process.env.AMBIENTE_PROCESSO == "producao") {
-        // ADAPTAR
+        query = `SELECT * FROM Maquina WHERE fkEmpresa = ${idEmpresa};`;
     }else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento"){
         query = `SELECT * FROM Maquina WHERE fkEmpresa = ${idEmpresa};`;
     }else{
@@ -39,7 +39,8 @@ function buscarComponentesMaquina(idEmpresa, idMaquina){
     var query = ``;
 
     if(process.env.AMBIENTE_PROCESSO == "producao") {
-        // ADAPTAR
+        //TALVEZ PRECISE ADAPTAR
+        query = `SELECT fkComponente FROM DadosServidor WHERE idMaquina = ${idMaquina} AND idEmpresa = ${idEmpresa} GROUP BY fkComponente;`;
     }else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento"){
         query = `SELECT fkComponente FROM DadosServidor WHERE idMaquina = ${idMaquina} AND idEmpresa = ${idEmpresa} GROUP BY fkComponente;`;
     }else{
@@ -55,17 +56,9 @@ function buscarUltimosRegistros(idEmpresa, idMaquina, fkComponente, limite_linha
     var query = ''
 
     if (process.env.AMBIENTE_PROCESSO == "producao") {
-
-        // ADAPTAR
-
-        query = `select top ${limite_linhas}
-        dht11_temperatura as temperatura, 
-        dht11_umidade as umidade,  
-                        momento,
-                        FORMAT(momento, 'HH:mm:ss') as momento_grafico
-                    from medida
-                    where fk_aquario = ${idAquario}
-                    order by id desc`;
+        // ADAPTAR SE PRECISAR
+        query = `SELECT TOP ${limite_linhas} * FROM DadosServidor 
+        WHERE idEmpresa = ${idEmpresa} AND idMaquina = ${idMaquina} AND fkComponente = ${fkComponente} ORDER BY idRegistro;`;
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         query = `SELECT * FROM DadosServidor 
                     WHERE idEmpresa = ${idEmpresa} AND idMaquina = ${idMaquina} AND fkComponente = ${fkComponente} ORDER BY idRegistro LIMIT ${limite_linhas};`;
@@ -83,17 +76,9 @@ function buscarRegistroTempoReal(idEmpresa, idMaquina, fkComponente) {
     var query = ''
 
     if (process.env.AMBIENTE_PROCESSO == "producao") {
-
-        // ADAPTAR
-
-        query = `select top ${limite_linhas}
-        dht11_temperatura as temperatura, 
-        dht11_umidade as umidade,  
-                        momento,
-                        FORMAT(momento, 'HH:mm:ss') as momento_grafico
-                    from medida
-                    where fk_aquario = ${idAquario}
-                    order by id desc`;
+        // ADAPTAR SE PRECISAR
+        query = `SELECT TOP 1 * FROM DadosServidor 
+            WHERE idEmpresa = ${idEmpresa} AND idMaquina = ${idMaquina} AND fkComponente = ${fkComponente} ORDER BY idRegistro DESC`;
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         query = `SELECT * FROM DadosServidor 
                     WHERE idEmpresa = ${idEmpresa} AND idMaquina = ${idMaquina} AND fkComponente = ${fkComponente} ORDER BY idRegistro DESC LIMIT 1;`;
@@ -129,10 +114,7 @@ function infoMaquina(idMaquina){
     var query = '';
 
     if (process.env.AMBIENTE_PROCESSO == "producao") {
-
-        // ADAPTAR
-
-        query = ``;
+        query = `SELECT * FROM InfoMaquina WHERE idMaquina = ${idMaquina}`;
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         query = `SELECT * FROM InfoMaquina WHERE idMaquina = ${idMaquina}`;
     } else {

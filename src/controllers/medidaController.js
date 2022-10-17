@@ -90,7 +90,7 @@ function mediaUsoComponente(req, res){
 
 function buscarServidores(req, res) {
 
-    var idEmpresa = req.body.idEmpresa
+    var idEmpresa = req.body.idEmpresa;
     
 
     medidaModel.buscarServidores(idEmpresa)

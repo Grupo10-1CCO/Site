@@ -206,6 +206,7 @@ h1,h2,h3 {
 
 .fr1Analise .processos{
     height: 30%;
+    border-radius: 10px;
 }
 
 .geral {
@@ -374,4 +375,16 @@ h1,h2,h3 {
     background-color: var(--preto-header);
     font-family: 'Poppins';
     font-weight: bolder;
+}
+
+.fr1Analise select{
+    height: 30px;
+    font-size: 14px;
+    font-family: 'Poppins';
+    font-weight: bolder;
+    border-radius: 10px;
+    border: none;
+    background-color: var(--preto-menu-div);
+    color: #ffffff;
+    text-align: center;
 }

@@ -177,3 +177,43 @@ function fecharModal() {
     divModal.style.display = "none";
 }
 
+function listarMaquinasSlc(idEmpresa){
+    var select = document.getElementById("slcMaquinas");
+    fetch("/medidas/buscarServidores", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            idEmpresa: idEmpresa
+        })
+    }).then(function (resposta) {
+        if (resposta.ok) {
+            
+            resposta.json().then(json => {
+                
+                    console.log(JSON.stringify(json));
+                    console.log(json);
+
+                for (var index = 0; index < json.length; index++) {
+
+                        var idMaquina = json[index].idMaquina;
+                        var serialMaquina = json[index].serialMaquina;
+                        var nomeMaquina = json[index].nome;
+                        var fkEmpresa = json[index].fkEmpresa;
+                        
+                        var idItem = `${idMaquina}`;
+                        
+                        var option = document.createElement("option");
+                        option.setAttribute("id", idItem);
+                        option.setAttribute("value", idItem);
+                        option.innerHTML = nomeMaquina;
+                        select.appendChild(option);
+                    }
+                  
+            })
+        
+
+        } 
+    });
+}

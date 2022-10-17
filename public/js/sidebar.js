@@ -50,9 +50,19 @@ var idEmpresa = sessionStorage.ID_EMPRESA
                             fkEmpresa = json[index].fkEmpresa;
                             
                             var idBotao = `maquina${idMaquina}`;
+
+                            var paginaAtual = window.location.href;
+
+                            var link = '';
+
+                            if(paginaAtual == "http://localhost:8080/dashboard/dashboard.html" || paginaAtual == "http://localhost:8080/dashboard/dashboard.html#"){
+                                link = '#';
+                            }else{
+                                link = 'dashboard.html';
+                            }
                             
                             ul_maquinas.innerHTML += `<li id="maquina${idMaquina}">
-                            <a href='#' onclick="guardar(${idMaquina}), selecionarBotao('${idBotao}'), buscarInfoMaquina(${idMaquina}), gerar(${fkEmpresa},${idMaquina})"><img src="../assets/icons/server.png">${nomeMaquina}</a>
+                            <a href='${link}' onclick="guardar(${idMaquina}), selecionarBotao('${idBotao}'), buscarInfoMaquina(${idMaquina}), gerar(${fkEmpresa},${idMaquina})"><img src="../assets/icons/server.png">${nomeMaquina}</a>
                         </li>`
                         }
                       

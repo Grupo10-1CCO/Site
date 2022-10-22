@@ -289,56 +289,114 @@
         title: "As senhas não coincidem",
       });
     }else{
-        // Enviando o valor da nova input
-        fetch("/usuarios/cadastrarEmpresa", {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-            nomeEmpresaServer: nomeEmpresa,
-            emailEmpresaServer: emailEmpresa,
-            cnpjServer: cnpj,
-            }),
-        })
-            .then(function (resposta) {
-            console.log("resposta: ", resposta);
 
-            if (resposta.ok) {
-                fetch("/usuarios/selecionarUltimaEmpresa").then(function (resposta) {
-                resposta.json().then(function (json) {
-                    console.log(json);
-                    console.log(JSON.stringify(json));
+        var validacaoEmailEmpresa = true;
+        var validacaoEmailUsuario = true;
 
-                    fkEmpresa = json[0].idEmpresa;
+        fetch(`/usuarios/validarEmailEmpresa/${emailEmpresa}`, {cache: 'no-store'}).then(function (resposta){
+            if(resposta.ok){
+                if(resposta.status == 200){
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        
+                        didOpen: (toast) => {
+                          toast.addEventListener("mouseenter", Swal.stopTimer);
+                          toast.addEventListener("mouseleave", Swal.resumeTimer);
+                        },
+                    });
+                
+                    Toast.fire({
+                        icon: "error",
+                        title: "Email da empresa já está cadastrado!",
+                    });
 
-                    console.log("FOI: " + fkEmpresa);
+                    validacaoEmailEmpresa = false;
+                }
+            }
+        });
 
-                    fetch("/usuarios/cadastrar", {
+        fetch(`/usuarios/validarEmailUsuario/${emailUsuario}`, {cache: 'no-store'}).then(function (resposta){
+            if(resposta.ok){
+                if(resposta.status == 200){
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        
+                        didOpen: (toast) => {
+                          toast.addEventListener("mouseenter", Swal.stopTimer);
+                          toast.addEventListener("mouseleave", Swal.resumeTimer);
+                        },
+                    });
+                
+                    Toast.fire({
+                        icon: "error",
+                        title: "Email do usuário já está cadastrado!",
+                    });
+
+                    validacaoEmailUsuario = false;
+                }
+            }
+        }).then(function (){
+            if(validacaoEmailEmpresa && validacaoEmailUsuario){
+                
+                // Enviando o valor da nova input
+                fetch("/usuarios/cadastrarEmpresa", {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json",
+                    "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        nomeServer: nomeUsuario,
-                        emailServer: emailUsuario,
-                        senhaServer: senhaUsuario,
-                        fkEmpresaServer: fkEmpresa,
+                    nomeEmpresaServer: nomeEmpresa,
+                    emailEmpresaServer: emailEmpresa,
+                    cnpjServer: cnpj,
                     }),
-                    }).then(function (resposta) {
+                }).then(function (resposta) {
+                    console.log("resposta: ", resposta);
+    
                     if (resposta.ok) {
-                        window.location = "login.html";
+                        fetch("/usuarios/selecionarUltimaEmpresa").then(function (resposta) {
+                            resposta.json().then(function (json) {
+                                console.log(json);
+                                console.log(JSON.stringify(json));
+    
+                                fkEmpresa = json[0].idEmpresa;
+    
+                                console.log("FOI: " + fkEmpresa);
+    
+                                fetch("/usuarios/cadastrar", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                        nomeServer: nomeUsuario,
+                                        emailServer: emailUsuario,
+                                        senhaServer: senhaUsuario,
+                                        fkEmpresaServer: fkEmpresa,
+                                    }),
+                                }).then(function (resposta) {
+                                    if (resposta.ok) {
+                                        window.location = "login.html";
+                                    }
+                                });
+                            });
+                        });
+                    } else {
+                        throw "Houve um erro ao tentar realizar o cadastro!";
                     }
-                    });
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
                 });
-                });
-            } else {
-                throw "Houve um erro ao tentar realizar o cadastro!";
             }
-            })
-            .catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`);
-            });
+        })
+
+        
+                    
     }
 
     

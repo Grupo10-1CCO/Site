@@ -11,6 +11,14 @@ router.get("/listar", function (req, res) {
     usuarioController.listar(req, res);
 });
 
+router.get("/validarEmailEmpresa/:emailEmpresa", function(req, res){
+    usuarioController.validarEmailEmpresa(req, res);
+});
+
+router.get("/validarEmailUsuario/:emailUsuario", function(req, res){
+    usuarioController.validarEmailUsuario(req, res);
+});
+
 router.get("/selecionarUltimaEmpresa", function (req, res){
     usuarioController.selecionarUltimaEmpresa(req, res);
 })

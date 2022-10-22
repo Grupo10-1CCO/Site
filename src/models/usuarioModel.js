@@ -42,6 +42,24 @@ function buscarFuncionarios(idEmpresa) {
     return database.executar(instrucao);
 }
 
+function validarEmailEmpresa(emailEmpresa) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function buscarLivros()");
+    var instrucao = `
+        SELECT emailEmpresa FROM usuarioEmpresa WHERE emailEmpresa LIKE '${emailEmpresa}';
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function validarEmailUsuario(emailUsuario) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function buscarLivros()");
+    var instrucao = `
+        SELECT emailUsuario FROM usuarioEmpresa WHERE emailUsuario LIKE '${emailUsuario}';
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
 function cadastrarEmpresa(cnpj, nomeEmpresa, emailEmpresa) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", cnpj, nomeEmpresa, emailEmpresa);
     
@@ -90,6 +108,8 @@ function cadastrar(nome, email, senha, fkEmpresa, cargo) {
 
 module.exports = {
     entrar,
+    validarEmailEmpresa,
+    validarEmailUsuario,
     cadastrar,
     cadastrarEmpresa,
     selecionarUltimaEmpresa,

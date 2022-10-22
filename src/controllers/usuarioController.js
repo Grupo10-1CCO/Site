@@ -81,6 +81,42 @@ function entrar(req, res) {
 
 }
 
+function validarEmailEmpresa(req, res){
+
+    var emailEmpresa = req.params.emailEmpresa;
+
+    usuarioModel.validarEmailEmpresa(emailEmpresa).then(function (resultado){
+        if(resultado.length > 0){
+            res.status(200).json(resultado);
+        }else{
+            res.status(204).send("Email válido!");
+        }
+    }).catch(function (erro){
+        console.log(erro);
+        console.log("Houve um erro ao validar se o email da empresa era válido! Erro: " + erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+
+}
+
+function validarEmailUsuario(req, res){
+
+    var emailUsuario = req.params.emailUsuario;
+
+    usuarioModel.validarEmailUsuario(emailUsuario).then(function (resultado){
+        if(resultado.length > 0){
+            res.status(200).json(resultado);
+        }else{
+            res.status(204).send("Email válido!");
+        }
+    }).catch(function (erro){
+        console.log(erro);
+        console.log("Houve um erro ao validar se o email do usuário era válido! Erro: " + erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+
+}
+
 function cadastrar(req, res) {
     // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
     // empresa ^^^^^^
@@ -177,6 +213,8 @@ function selecionarUltimaEmpresa(req, res){
 
 module.exports = {
     entrar,
+    validarEmailEmpresa,
+    validarEmailUsuario,
     cadastrar,
     cadastrarEmpresa,
     selecionarUltimaEmpresa,

@@ -597,3 +597,57 @@ a {
 
 /* FOOTER */
 
+/* Media Responsividade - EM CONSTRUÇÃO */
+
+/* Celulares Antigos */
+/*@media (max-width: 480px){
+    
+    .header{
+        justify-content: space-around;
+    }
+
+    .header_box{
+        display: none;
+    }
+
+    .header_botao{
+        width: 36vw;
+    }
+
+    .header_img{
+        height: auto;
+        width: 85%;
+    }
+
+    .header_logo a{
+        display: flex;
+        align-items: center;
+    }
+
+    .botoes{
+        width: 40%;
+        justify-content: space-around;
+    }
+
+    
+    .banner{
+        width: 100%;
+        height: 250px;
+    }
+
+}
+*/
+
+/* Celulares Modernos */
+/*
+@media (max-width: 768px){
+
+}
+*/
+
+/* Notebooks e Computadores */
+/*
+@media (min-width: 768px){
+
+}
+*/

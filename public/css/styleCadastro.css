@@ -1,4 +1,4 @@
-/* FONTES */
+    /* FONTES */
 /* @font-face {
     font-family: OswaldRegular;
     src: url(../Site/fonts/Oswald-Regular.ttf);
@@ -218,6 +218,14 @@ a {
 #form_usuario{
     display: none;
 }
-
+/* E DETALHE : */
+#loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#loading img{
+    width: 50%;
+}
 /* Fim Seção Cadastro
 /* ====================================================== */

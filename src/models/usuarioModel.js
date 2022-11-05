@@ -106,11 +106,37 @@ function cadastrar(nome, email, senha, fkEmpresa, cargo) {
     return database.executar(instrucao);
 }
 
+function cadastrarUsuario(nome, email, senha, idEmpresa, cargo) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", nome, email, senha, idEmpresa, cargo);
+
+    var instrucao = ``;
+
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        instrucao = `
+            INSERT INTO Usuario (nome, email, senha, fkEmpresa, cargo) VALUES ('${nome}', '${email}', HashBytes('MD5', '${senha}'), ${idEmpresa}, '${cargo}');
+        `;
+    }else if(process.env.AMBIENTE_PROCESSO == "desenvolvimento"){
+        instrucao = `
+            INSERT INTO Usuario (nome, email, senha, fkEmpresa, cargo) VALUES ('${nome}', '${email}', MD5('${senha}'), ${idEmpresa}, '${cargo}');
+        `;
+    }else{
+        console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
+        return
+    }
+    
+    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
+    //  e na ordem de inserção dos dados.
+    
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
 module.exports = {
     entrar,
     validarEmailEmpresa,
     validarEmailUsuario,
     cadastrar,
+    cadastrarUsuario,
     cadastrarEmpresa,
     selecionarUltimaEmpresa,
     listar,

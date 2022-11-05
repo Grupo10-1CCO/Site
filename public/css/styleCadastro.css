@@ -218,6 +218,10 @@ a {
 #form_usuario{
     display: none;
 }
+#form_empresa {
+    display: flex;
+    flex-direction: column;
+}
 /* E DETALHE : */
 #loading {
     display: flex;

@@ -388,3 +388,23 @@ h1,h2,h3 {
     color: #ffffff;
     text-align: center;
 }
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    margin: auto;
+}
+
+.formulario input, select {
+    width: 100%;
+    height: 40px;
+    margin-bottom:20px ;
+    
+    border-radius: 10px;
+}
+
+.formulario {
+    color: white;
+    font-family: 'Poppins';
+}

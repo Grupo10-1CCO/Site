@@ -73,7 +73,9 @@
                 <button onclick="navegar()">Voltar</button>
               </div>
               <div class="campo-senha">
-                <div id="loading"><img src="assets/loading_verde.gif"></div>
+                <div id="loading">
+                  <img src="assets/loading_verde.gif">
+                </div>
                 <button id="botaoVisibility" onclick="cadastrar()">Cadastrar</button>
               </div>
             </div>
@@ -88,28 +90,22 @@
 
 <script>
   loading.style.display = 'none';
-  function cadastrar() {
-    //Recupere o valor da nova input pelo nome do id
-    // Agora vá para o método fetch logo abaixo
-    // var cargo = cargo_cad_input.value;
-    // var fkEmpresa = fkEmpresa_cad_input.value;
-    // usuario ^^^
-    // Empresa VVV
 
-    /*
-        var nome = "Filipe";
-        var email = "Filipe@email.com";
-        var senha = 1234;
-        var confirmacaoSenha = 1234;
-        var fkEmpresa = 1;
-        // usuario ^^^
-        // Empresa VVV
-        var nomeEmpresa = "Itau";
-        var emailEmpresa = "Itau@itaudominio.com";
-        var cnpj = "11111111111111";
-        */
-    botaoVisibility.style.display="none";
-    loading.style.display="flex";
+  function mensagem() {
+    loading.style.display = 'block';
+  }
+
+  function sumir() {
+    loading.style.display = 'none';
+    botaoVisibility.style.display='block';
+  }
+
+  function cadastrar() {
+    botaoVisibility.style.display='none';
+    loading.style.display = 'flex';
+    setInterval(mensagem,4500)
+    setInterval(sumir,4500)
+
     var nomeEmpresa = inp_nome_empresa.value;
     var emailEmpresa = inp_email_empresa.value;
     var cnpj = inp_cnpj_empresa.value;
@@ -136,8 +132,8 @@
         title: "Preencha o cadastro da empresa",
       });
       return false
-      botaoVisibility.style.display="block";
-      loading.style.display="none";
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
     }else if (nomeEmpresa == "") {
         const Toast = Swal.mixin({
         toast: true,
@@ -156,8 +152,8 @@
         title: "Informe o nome da empresa",
       });
       return false
-      botaoVisibility.style.display="block";
-      loading.style.display="none";
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
     }else if(cnpj == ""){
         const Toast = Swal.mixin({
         toast: true,
@@ -175,10 +171,32 @@
         icon: "error",
         title: "Informe o CNPJ",
       });
-      botaoVisibility.style.display="block";
-      loading.style.display="none";
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
 
-    } else if (emailEmpresa == "") {
+    }
+    else if(cnpj.length < 14){
+        const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
+        icon: "error",
+        title: "CNPJ deve ter 14 digitos",
+      });
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
+
+    }
+     else if (emailEmpresa == "") {
         const Toast = Swal.mixin({
         toast: true,
         position: "top",
@@ -196,9 +214,52 @@
         title: "Preencha o email da empresa",
       });
       return false
-      botaoVisibility.style.display="block";
-      loading.style.display="none";
-    }else if(nomeUsuario == "" && emailUsuario == "" && senhaUsuario ==  "" && confirmacaoSenha == ""){
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
+    }
+    else if (emailEmpresa.indexOf("@") == -1) {
+        const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
+        icon: "error",
+        title: "Falta @ no email da empresa",
+      });
+      return false
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
+    }
+    else if (emailEmpresa.indexOf(".com")  == -1) {
+        const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
+        icon: "error",
+        title: "Falta .com no email da empresa",
+      });
+      return false
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
+    }
+    else if(nomeUsuario == "" && emailUsuario == "" && senhaUsuario ==  "" && confirmacaoSenha == ""){
         const Toast = Swal.mixin({
         toast: true,
         position: "top",
@@ -216,8 +277,8 @@
         title: "Preencha o cadastro do usuário",
       });
       return false
-      botaoVisibility.style.display="block";
-      loading.style.display="none";
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
     }else if(nomeUsuario == ""){
         const Toast = Swal.mixin({
         toast: true,
@@ -235,8 +296,8 @@
         icon: "error",
         title: "Informe o nome de usuário",
       });
-      botaoVisibility.style.display="block";
-      loading.style.display="none";
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
     }else if(emailUsuario == ""){
         const Toast = Swal.mixin({
         toast: true,
@@ -254,9 +315,50 @@
         icon: "error",
         title: "Informe o email do usuário",
       });
-      botaoVisibility.style.display="block";
-      loading.style.display="none";
-    }else if(senhaUsuario == ""){
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
+    }
+    else if(emailUsuario.indexOf("@") == -1){
+        const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
+        icon: "error",
+        title: "Falta @ no email do usúario",
+      });
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
+    }
+    else if(emailUsuario.indexOf(".com") == -1){
+        const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
+        icon: "error",
+        title: "Falta .com no email do usúario",
+      });
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
+    }
+    else if(senhaUsuario == ""){
         const Toast = Swal.mixin({
         toast: true,
         position: "top",
@@ -273,9 +375,30 @@
         icon: "error",
         title: "Informe a senha do usuário",
       });
-      botaoVisibility.style.display="block";
-      loading.style.display="none";
-    }else if(confirmacaoSenha == ""){
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
+    }
+    else if(senhaUsuario.length < 8){
+        const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
+        icon: "error",
+        title: "Informe uma senha com no mínimo 8 digitos",
+      });
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
+    }
+    else if(confirmacaoSenha == ""){
         const Toast = Swal.mixin({
         toast: true,
         position: "top",
@@ -292,8 +415,8 @@
         icon: "error",
         title: "Confirme a senha",
       });
-      botaoVisibility.style.display="block";
-      loading.style.display="none";
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
     }else if (confirmacaoSenha != senhaUsuario) {
         const Toast = Swal.mixin({
         toast: true,
@@ -311,10 +434,11 @@
         icon: "error",
         title: "As senhas não coincidem",
       });
-      botaoVisibility.style.display="block";
-      loading.style.display="none";
+      setInterval(mensagem,4500)
+      setInterval(sumir,4500)
     }else{
-
+        setInterval(mensagem,4500)
+        setInterval(sumir,4500)
         var validacaoEmailEmpresa = true;
         var validacaoEmailUsuario = true;
         
@@ -335,12 +459,12 @@
                 
                     Toast.fire({
                         icon: "error",
-                        title: "Email da empresa já está cadastrado!",
+                        title: "Email da empresa já está cadastrado",
                     });
 
                     validacaoEmailEmpresa = false;
-                    botaoVisibility.style.display="block";
-                    loading.style.display="none";
+                    setInterval(mensagem,4500)
+                    setInterval(sumir,4500)
                 }
             }
         });

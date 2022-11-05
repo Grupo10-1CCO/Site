@@ -6,8 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/styleDash.css">
-    <link rel="icon" type="image/x-icon" href="assets/LogoSimbolo.png">
     <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" type="image/x-icon" href="../assets/LogoSimbolo.png" />
     <title>SAMP</title>
 </head>
 
@@ -91,7 +92,7 @@
 <script src="../js/sidebar.js"></script>
 <script>
     function cadastrarUser() {
-
+        var validacao = true;
 
         //Recupere o valor da nova input pelo nome do id
         // Agora vá para o método fetch logo abaixo
@@ -103,14 +104,181 @@
         var senhaVar = senha_input.value;
         var confirmacaoSenhaVar = confirmacao_senha_input.value;
 
-        if (nomeVar == "" || emailVar == "" || senhaVar == "" || confirmacaoSenhaVar == "") {
-            cardErro.style.display = "block"
-            alert('Preencha todos os campos')
+        if (nomeVar == "" && emailVar == "" && senhaVar == "" && confirmacaoSenhaVar == "") {
+            validacao = false
+            const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+            });
 
-
-            return false;
+            Toast.fire({
+            icon: "error",
+            title: "Preencha todos os campos",
+            color: "#000000"
+            });
+            console.log("Todos os campos NULL")
         }
-        else {
+        else if(nomeVar == ""){
+            validacao = false
+            const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+            });
+
+            Toast.fire({
+            icon: "error",
+            title: "Preencha o nome",
+            color: "#000000"
+            });
+            console.log("Nome null")
+        }
+        else if(emailVar == ""){
+            validacao = false
+            const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+            });
+
+            Toast.fire({
+            icon: "error",
+            title: "Preencha o email",
+            color: "#000000"
+            });
+        }
+        else if (emailVar.indexOf("@") == -1){
+            validacao = false
+            const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+            });
+
+            Toast.fire({
+            icon: "error",
+            title: "Falta @ no email",
+            color: "#000000"
+            });
+        }
+        else if(emailVar.indexOf(".com") == -1){
+            validacao = false
+            const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+            });
+
+            Toast.fire({
+            icon: "error",
+            title: "Falta .com no email",
+            color: "#000000"
+            });
+        }
+        else if(senhaVar == ""){
+            validacao = false
+            const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+            });
+
+            Toast.fire({
+            icon: "error",
+            title: "Preencha a senha",
+            color: "#000000"
+            });
+            console.log("passou da senha vazia")
+        }
+        else if(senhaVar.length < 8){
+            validacao = false
+            const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+            });
+
+            Toast.fire({
+            icon: "error",
+            title: "A senha deve ter no mínimo 8 caracteres",
+            color: "#000000"
+            });
+        }
+        else if(confirmacaoSenhaVar == ""){
+            validacao = false
+            const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+            });
+
+            Toast.fire({
+            icon: "error",
+            title: "Confirme a senha",
+            color: "#000000"
+            });
+        }
+        else if(confirmacaoSenhaVar != senhaVar){
+            validacao = false
+            const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            timer: 3000,
+            didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+            });
+
+            Toast.fire({
+            icon: "error",
+            title: "A senhas não coincidem ",
+            color: "#000000"
+            });
+        }
+        if(validacao) {
             fetch("/usuarios/cadastrarUsuario", {
                 method: "POST",
                 headers: {
@@ -133,11 +301,23 @@
                 if (resposta.ok) {
 
 
-                    alert('Usuário cadastrado com sucesso')
+                    const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    didOpen: (toast) => {
+                    toast.addEventListener("mouseenter", Swal.stopTimer);
+                    toast.addEventListener("mouseleave", Swal.resumeTimer);
+                        },
+                    });
 
-                    setTimeout(() => {
+                    Toast.fire({
+                    icon: "success",
+                    title: "Usuário cadastrado com sucesso!",
+                    color: "#000000"
+                    });
 
-                    }, "2000")
 
                     limparFormulario();
 

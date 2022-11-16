@@ -14,6 +14,20 @@ function buscarMaquinas(req, res){
     })
 }
 
+function listarMetricas(req, res){
+    medidaModel.listarMetricas().then(function (resultado){
+        if(resultado.length > 0){
+            res.status(200).json(resultado);
+        }else{
+            res.status(204).send("Não foram encontradas métricas!");
+        }
+    }).catch(function (erro){
+        console.log(erro);
+        console.log("Houve um erro ao tentar resgatar as máquinas! Erro: " + erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    })
+}
+
 function buscarComponentesMaquina(req, res){
 
     var idEmpresa = req.params.idEmpresa;
@@ -117,7 +131,7 @@ function infoMaquina(req, res){
         if(resultado.length > 0){
             res.status(200).json(resultado);
         }else{
-            res.status(204).send("Não foram encontrados componentes da maquina do idMaquina informado!");
+            res.status(204).send("Não foram encontradas informações da maquina do idMaquina informado!");
         }
     }).catch(function (erro){
         console.log(erro);
@@ -127,6 +141,82 @@ function infoMaquina(req, res){
 
 }
 
+function cadastrarMetrica(req, res) {
+    // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
+    // empresa ^^^^^^
+    // usuario VVVVV
+    // var fkEmpresa = req.body.fkEmpresaServer;
+    
+    var minimo = req.body.minimoServer;
+    var maximo = req.body.maximoServer;
+    var idEmpresa = req.body.idEmpresaServer;
+    
+
+    // Faça as validações dos valores
+    if (minimo == undefined) {
+        res.status(400).send("o valor mínimo está undefined!");
+    } else if (maximo == undefined) {
+        res.status(400).send("o valor máximo está undefined!");
+    } else if (idEmpresa == undefined) {
+        res.status(400).send("o Id da empresa está undefined!");
+    }else {
+
+        // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
+        medidaModel.cadastrarMetrica(minimo, maximo, idEmpresa)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastro! Erroblé: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
+function atribuirMetrica(req, res) {
+    // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
+    // empresa ^^^^^^
+    // usuario VVVVV
+    // var fkEmpresa = req.body.fkEmpresaServer;
+    
+    var idMaquina = req.body.idMaquinaServer;
+    var nomeComponente = req.body.nomeComponenteServer;
+    var idMetrica = req.body.idMetricaServer;
+    
+
+    // Faça as validações dos valores
+    if (idMaquina == undefined) {
+        res.status(400).send("o id da máquina está undefined!");
+    } else if (nomeComponente == undefined) {
+        res.status(400).send("o nome do componente está undefined!");
+    } else {
+
+        // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
+        medidaModel.atribuirMetrica(idMaquina, nomeComponente, idMetrica)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar a atribuição! Erroblé: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
 module.exports = {
     buscarMaquinas,
     buscarUltimosRegistros,
@@ -134,7 +224,10 @@ module.exports = {
     buscarRegistroTempoReal,
     mediaUsoComponente,
     buscarServidores,
-    infoMaquina
+    infoMaquina,
+    cadastrarMetrica,
+    atribuirMetrica,
+    listarMetricas
     
     // buscarUltimasMedidas,
     // buscarMedidasEmTempoReal

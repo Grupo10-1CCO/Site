@@ -35,8 +35,20 @@ router.get("/tempo-real/:idAquario", function (req, res) {
     medidaController.buscarMedidasEmTempoReal(req, res);
 })
 
+router.get("/listarMetricas", function (req, res) {
+    medidaController.listarMetricas(req, res);
+})
+
 router.post("/buscarServidores", function (req, res) {
     medidaController.buscarServidores(req, res);
+})
+
+router.post("/cadastrarMetrica", function (req, res) {
+    medidaController.cadastrarMetrica(req, res);
+})
+
+router.post("/atribuirMetrica", function (req, res) {
+    medidaController.atribuirMetrica(req, res);
 })
 
 module.exports = router;

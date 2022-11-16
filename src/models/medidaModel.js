@@ -19,6 +19,25 @@ function buscarMaquinas(){
     return database.executar(query);
 }
 
+function listarMetricas(){
+    var query = '';
+
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+
+        // ADAPTAR
+
+        query = `SELECT * FROM metrica;`;
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        query = `SELECT * FROM metrica;`;
+    } else {
+        console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
+        return
+    }
+
+    console.log("Executando a instrução SQL: \n" + query);
+    return database.executar(query);
+}
+
 function buscarServidores(idEmpresa){
     var query = ``;
 
@@ -127,6 +146,57 @@ function infoMaquina(idMaquina){
 
 }
 
+function cadastrarMetrica(minimo, maximo, idEmpresa) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():");
+
+    var instrucao = ``;
+
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        instrucao = `
+            INSERT INTO Metrica (capturaMin, capturaMax) VALUES ('${minimo}','${maximo}');
+        `;
+    }else if(process.env.AMBIENTE_PROCESSO == "desenvolvimento"){
+        instrucao = `
+            INSERT INTO Metrica (capturaMin, capturaMax) VALUES ('${minimo}','${maximo}');        
+        `;
+    }else{
+        console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
+        return
+    }
+    
+    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
+    //  e na ordem de inserção dos dados.
+    
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function atribuirMetrica(idMaquina, nomeComponente, idMetrica) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():");
+
+    var instrucao = ``;
+
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        instrucao = `
+        update componente set fkMetrica = ${idMetrica} where fkMaquina = ${idMaquina} and nomeComponente like '${nomeComponente}%';
+
+        `;
+    }else if(process.env.AMBIENTE_PROCESSO == "desenvolvimento"){
+        instrucao = `
+        update componente set fkMetrica = ${idMetrica} where fkMaquina = ${idMaquina} and nomeComponente like '${nomeComponente}%';
+       
+        `;
+    }else{
+        console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
+        return
+    }
+    
+    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
+    //  e na ordem de inserção dos dados.
+    
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
 // function buscarUltimasMedidas(idAquario, limite_linhas) {
 
 //     instrucaoSql = ''
@@ -196,7 +266,10 @@ module.exports = {
     buscarRegistroTempoReal,
     mediaUsoComponente,
     buscarServidores,
-    infoMaquina
+    infoMaquina,
+    cadastrarMetrica,
+    atribuirMetrica,
+    listarMetricas
     // buscarUltimasMedidas,
     // buscarMedidasEmTempoReal
 }

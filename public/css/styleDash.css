@@ -78,6 +78,7 @@ h1,h2,h3 {
 
 #ul_maquinas {
     overflow: auto;
+    height: 50%;
 }
 
 
